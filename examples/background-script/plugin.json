@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "template.background.focus-input",
+  "version": "0.1.0",
+  "kind": "script",
+  "scope": "background",
+  "displayName": "Focus Input Template",
+  "description": "After the sidebar is opened, focus the shell editor in the active tab.",
+  "defaultEnabled": true,
+  "requiresExtension": true,
+  "permissions": [
+    "tabs:read",
+    "bridge:send"
+  ],
+  "compatibility": {
+    "versionRange": ">=2.4.75 <3.0.0"
+  },
+  "script": {
+    "entry": "./background.js"
+  }
+}

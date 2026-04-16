@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "registryId": "template",
+  "displayName": "Cerebr Example Registry",
+  "generatedAt": "2026-04-16T00:00:00Z",
+  "plugins": [
+    {
+      "id": "template.prompt.concise",
+      "kind": "declarative",
+      "scope": "prompt",
+      "displayName": "Concise Reply Template",
+      "description": "Append a concise-answer instruction to the system prompt.",
+      "latestVersion": "0.1.0",
+      "permissions": [
+        "prompt:extend"
+      ],
+      "compatibility": {
+        "versionRange": ">=2.4.75 <3.0.0"
+      },
+      "availability": {
+        "status": "active",
+        "reason": ""
+      },
+      "install": {
+        "mode": "package",
+        "packageUrl": "plugins/template.prompt.concise/0.1.0/plugin.json"
+      }
+    },
+    {
+      "id": "template.shell.reasoning-retry",
+      "kind": "declarative",
+      "scope": "shell",
+      "displayName": "Reasoning Retry Policy Template",
+      "description": "Retry when the model emits reasoning content without a final answer.",
+      "latestVersion": "0.1.0",
+      "permissions": [
+        "chat:write"
+      ],
+      "compatibility": {
+        "versionRange": ">=2.4.75 <3.0.0"
+      },
+      "availability": {
+        "status": "active",
+        "reason": ""
+      },
+      "install": {
+        "mode": "package",
+        "packageUrl": "plugins/template.shell.reasoning-retry/0.1.0/plugin.json"
+      }
+    },
+    {
+      "id": "template.page.article-focus",
+      "kind": "declarative",
+      "scope": "page",
+      "displayName": "Article Focus Extractor Template",
+      "description": "Prefer article-like selectors and strip common layout chrome before Cerebr extracts page text.",
+      "latestVersion": "0.1.0",
+      "permissions": [
+        "page:read"
+      ],
+      "requiresExtension": true,
+      "compatibility": {
+        "versionRange": ">=2.4.75 <3.0.0"
+      },
+      "availability": {
+        "status": "active",
+        "reason": ""
+      },
+      "install": {
+        "mode": "package",
+        "packageUrl": "plugins/template.page.article-focus/0.1.0/plugin.json"
+      }
+    },
+    {
+      "id": "template.shell.quick-insert",
+      "kind": "script",
+      "scope": "shell",
+      "displayName": "Quick Insert Template",
+      "description": "A shell plugin that mounts a small input action and adds a persistent prompt fragment.",
+      "latestVersion": "0.1.0",
+      "permissions": [
+        "prompt:extend",
+        "ui:mount"
+      ],
+      "compatibility": {
+        "versionRange": ">=2.4.75 <3.0.0"
+      },
+      "availability": {
+        "status": "active",
+        "reason": ""
+      },
+      "install": {
+        "mode": "package",
+        "packageUrl": "plugins/template.shell.quick-insert/0.1.0/plugin.json"
+      }
+    },
+    {
+      "id": "template.background.focus-input",
+      "kind": "script",
+      "scope": "background",
+      "displayName": "Focus Input Template",
+      "description": "After the sidebar is opened, focus the shell editor in the active tab.",
+      "latestVersion": "0.1.0",
+      "permissions": [
+        "tabs:read",
+        "bridge:send"
+      ],
+      "requiresExtension": true,
+      "compatibility": {
+        "versionRange": ">=2.4.75 <3.0.0"
+      },
+      "availability": {
+        "status": "active",
+        "reason": ""
+      },
+      "install": {
+        "mode": "package",
+        "packageUrl": "plugins/template.background.focus-input/0.1.0/plugin.json"
+      }
+    }
+  ]
+}

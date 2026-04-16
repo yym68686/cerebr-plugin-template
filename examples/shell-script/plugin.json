@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "template.shell.quick-insert",
+  "version": "0.1.0",
+  "kind": "script",
+  "scope": "shell",
+  "displayName": "Quick Insert Template",
+  "description": "A shell plugin that mounts a small input action and adds a persistent prompt fragment.",
+  "defaultEnabled": true,
+  "permissions": [
+    "prompt:extend",
+    "ui:mount"
+  ],
+  "compatibility": {
+    "versionRange": ">=2.4.75 <3.0.0"
+  },
+  "script": {
+    "entry": "./shell.js"
+  }
+}

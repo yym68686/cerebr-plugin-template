@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "template.prompt.concise",
+  "version": "0.1.0",
+  "kind": "declarative",
+  "scope": "prompt",
+  "displayName": "Concise Reply Template",
+  "description": "Append a concise-answer instruction to the system prompt.",
+  "defaultEnabled": true,
+  "permissions": [
+    "prompt:extend"
+  ],
+  "compatibility": {
+    "versionRange": ">=2.4.75 <3.0.0"
+  },
+  "declarative": {
+    "type": "prompt_fragment",
+    "placement": "system.append",
+    "content": "Prefer concise, high-signal answers unless the user explicitly asks for more depth.",
+    "priority": 0
+  }
+}

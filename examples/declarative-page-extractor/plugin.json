@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "template.page.article-focus",
+  "version": "0.1.0",
+  "kind": "declarative",
+  "scope": "page",
+  "displayName": "Article Focus Extractor Template",
+  "description": "Prefer article-like selectors and strip common layout chrome before Cerebr extracts page text.",
+  "defaultEnabled": true,
+  "requiresExtension": true,
+  "permissions": [
+    "page:read"
+  ],
+  "compatibility": {
+    "versionRange": ">=2.4.75 <3.0.0"
+  },
+  "declarative": {
+    "type": "page_extractor",
+    "matches": [
+      "*://*/*"
+    ],
+    "includeSelectors": [
+      "article",
+      "main",
+      "[role=\"main\"]",
+      ".article",
+      ".post",
+      ".entry-content",
+      ".markdown-body"
+    ],
+    "excludeSelectors": [
+      "nav",
+      "header",
+      "footer",
+      "aside",
+      ".sidebar",
+      ".ads",
+      ".advertisement",
+      ".toc"
+    ],
+    "strategy": "replace",
+    "priority": 10,
+    "maxTextLength": 30000,
+    "collapseWhitespace": true
+  }
+}

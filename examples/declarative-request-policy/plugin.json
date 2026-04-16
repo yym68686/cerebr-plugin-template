@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "template.shell.reasoning-retry",
+  "version": "0.1.0",
+  "kind": "declarative",
+  "scope": "shell",
+  "displayName": "Reasoning Retry Policy Template",
+  "description": "Retry when the model emits reasoning content without a final answer.",
+  "defaultEnabled": true,
+  "permissions": [
+    "chat:write"
+  ],
+  "compatibility": {
+    "versionRange": ">=2.4.75 <3.0.0"
+  },
+  "declarative": {
+    "type": "request_policy",
+    "applyTo": {
+      "modelIncludes": [
+        "gemini"
+      ]
+    },
+    "retry": {
+      "onErrorCodes": [
+        "CEREBR_REASONING_ONLY_RESPONSE",
+        "CEREBR_MISFILED_THINK_SILENTLY"
+      ],
+      "maxAttempts": 6,
+      "reason": "template:reasoning-retry"
+    }
+  }
+}

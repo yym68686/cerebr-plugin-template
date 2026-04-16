@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "template.page.selection-helper",
+  "version": "0.1.0",
+  "kind": "script",
+  "scope": "page",
+  "displayName": "Selection Helper Template",
+  "description": "A starter page plugin that shows an anchored action for selected text and imports a prompt into Cerebr.",
+  "defaultEnabled": true,
+  "requiresExtension": true,
+  "permissions": [
+    "page:selection",
+    "shell:input",
+    "ui:mount"
+  ],
+  "compatibility": {
+    "versionRange": ">=2.4.75 <3.0.0"
+  },
+  "script": {
+    "entry": "./page.js"
+  }
+}
