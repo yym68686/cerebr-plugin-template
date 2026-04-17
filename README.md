@@ -25,6 +25,8 @@ The root of the repository is already a valid local `page` script plugin, and th
 6. Open `Settings -> Plugins -> Developer`.
 7. Drag this folder into Cerebr, or use `Choose Plugin Folder`.
 
+The root [plugin.json](./plugin.json) is the sideload entry. Nested example manifests under [examples](./examples) are ignored as long as the root manifest is present.
+
 ## Root layout
 
 ```text
@@ -92,7 +94,7 @@ Preferred v2 contribution groups:
 ## Import rules
 
 - relative imports inside your plugin folder are supported
-- absolute imports that start with `/` are only safe for host-loaded plugins, not dropped guest shell bundles
+- dropped local `shell` plugins should keep using relative bundle imports; absolute imports that start with `/` are rejected during local shell bundle validation
 - bare specifiers such as `react`, `lodash`, or `@scope/pkg` are not supported by the runtime loader
 - cross-origin script imports are rejected for local sideloaded plugins
 - dropped local `shell` plugins in the extension host must be self-contained and should stick to relative imports only

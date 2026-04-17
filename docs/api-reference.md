@@ -134,6 +134,7 @@ Common values:
 `api.ui`
 
 - `showToast(message, options)`
+- `copyText(text)`
 - `mountSlot(slotId, renderer, options)`
 - `getAvailableSlots()`
 

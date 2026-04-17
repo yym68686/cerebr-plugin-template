@@ -11,10 +11,11 @@ Rules:
 - developer mode must be enabled before local script plugins can run
 - drag the whole plugin folder into `Settings -> Plugins -> Developer`
 - the folder must contain exactly one `plugin.json` at the plugin root
+- if the folder also contains nested example manifests, Cerebr prefers the shallowest `plugin.json` and ignores deeper ones under that selected root
 - local sideload currently supports script plugins only
 - supported script scopes are `page`, `shell`, and `background`
 - `background` plugins only run in the browser extension host and must set `requiresExtension: true`
-- dropped local `shell` plugins in the extension host run inside the static guest runtime and must stay self-contained
+- dropped local `shell` plugins in the extension host run inside the sandboxed guest runtime and must stay self-contained
 
 ## Script entry resolution
 

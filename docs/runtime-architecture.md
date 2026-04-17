@@ -147,7 +147,7 @@ Recommended defaults:
 
 ## Local shell runtime
 
-Dropped local `shell` plugins in the browser extension host run in a static guest runtime.
+Dropped local `shell` plugins in the browser extension host run in the sandboxed guest runtime.
 
 That means:
 
