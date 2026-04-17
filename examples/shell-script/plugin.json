@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "id": "template.shell.quick-insert",
   "version": "0.1.0",
   "kind": "script",
@@ -8,13 +8,16 @@
   "description": "A shell plugin that uses host-native input actions, native slash commands, a first-level menu item, and a host page.",
   "defaultEnabled": true,
   "permissions": [
-    "prompt:extend",
-    "shell:input",
-    "shell:menu",
-    "shell:page"
+    "prompt:fragments",
+    "shell:input:write",
+    "shell:input:actions",
+    "shell:input:slash-commands",
+    "shell:menu:items",
+    "shell:page:control"
   ],
+  "activationEvents": ["shell.ready"],
   "compatibility": {
-    "versionRange": ">=2.4.84 <3.0.0"
+    "versionRange": ">=2.4.86 <3.0.0"
   },
   "script": {
     "entry": "./shell.js"

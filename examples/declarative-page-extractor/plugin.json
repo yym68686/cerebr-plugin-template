@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "id": "template.page.article-focus",
   "version": "0.1.0",
   "kind": "declarative",
@@ -9,38 +9,42 @@
   "defaultEnabled": true,
   "requiresExtension": true,
   "permissions": [
-    "page:read"
+    "page:extractors"
   ],
+  "activationEvents": ["page.ready"],
   "compatibility": {
-    "versionRange": ">=2.4.84 <3.0.0"
+    "versionRange": ">=2.4.86 <3.0.0"
   },
-  "declarative": {
-    "type": "page_extractor",
-    "matches": [
-      "*://*/*"
-    ],
-    "includeSelectors": [
-      "article",
-      "main",
-      "[role=\"main\"]",
-      ".article",
-      ".post",
-      ".entry-content",
-      ".markdown-body"
-    ],
-    "excludeSelectors": [
-      "nav",
-      "header",
-      "footer",
-      "aside",
-      ".sidebar",
-      ".ads",
-      ".advertisement",
-      ".toc"
-    ],
-    "strategy": "replace",
-    "priority": 10,
-    "maxTextLength": 30000,
-    "collapseWhitespace": true
+  "contributions": {
+    "pageExtractors": [
+      {
+        "matches": [
+          "*://*/*"
+        ],
+        "includeSelectors": [
+          "article",
+          "main",
+          "[role=\"main\"]",
+          ".article",
+          ".post",
+          ".entry-content",
+          ".markdown-body"
+        ],
+        "excludeSelectors": [
+          "nav",
+          "header",
+          "footer",
+          "aside",
+          ".sidebar",
+          ".ads",
+          ".advertisement",
+          ".toc"
+        ],
+        "strategy": "replace",
+        "priority": 10,
+        "maxTextLength": 30000,
+        "collapseWhitespace": true
+      }
+    ]
   }
 }

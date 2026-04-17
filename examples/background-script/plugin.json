@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "id": "template.background.focus-input",
   "version": "0.1.0",
   "kind": "script",
@@ -9,11 +9,12 @@
   "defaultEnabled": true,
   "requiresExtension": true,
   "permissions": [
-    "tabs:read",
-    "bridge:send"
+    "tabs:query:active",
+    "bridge:send:shell"
   ],
+  "activationEvents": ["hook:onActionClicked", "hook:onCommand"],
   "compatibility": {
-    "versionRange": ">=2.4.84 <3.0.0"
+    "versionRange": ">=2.4.86 <3.0.0"
   },
   "script": {
     "entry": "./background.js"

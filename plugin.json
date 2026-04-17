@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "id": "template.page.selection-helper",
   "version": "0.1.0",
   "kind": "script",
@@ -9,12 +9,14 @@
   "defaultEnabled": true,
   "requiresExtension": true,
   "permissions": [
-    "page:selection",
-    "shell:input",
-    "ui:mount"
+    "page:selection:read",
+    "page:selection:clear",
+    "shell:input:write",
+    "ui:anchored-action"
   ],
+  "activationEvents": ["page.ready"],
   "compatibility": {
-    "versionRange": ">=2.4.84 <3.0.0"
+    "versionRange": ">=2.4.86 <3.0.0"
   },
   "script": {
     "entry": "./page.js"

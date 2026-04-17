@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 2,
+  "id": "template.page.selection-actions",
+  "version": "0.1.0",
+  "kind": "declarative",
+  "scope": "page",
+  "displayName": "Selection Actions Template",
+  "description": "Add anchored page actions that import prompt scaffolds into Cerebr without shipping page runtime code.",
+  "defaultEnabled": true,
+  "requiresExtension": true,
+  "permissions": [
+    "page:selection:read",
+    "page:selection:clear",
+    "shell:input:write",
+    "ui:anchored-action"
+  ],
+  "activationEvents": ["page.ready"],
+  "compatibility": {
+    "versionRange": ">=2.4.86 <3.0.0"
+  },
+  "contributions": {
+    "selectionActions": [
+      {
+        "id": "explain-selection",
+        "label": "Explain",
+        "title": "Explain the current selection",
+        "icon": "dot",
+        "prompt": "Please explain the selected text and extract the key points:\n\n{{selection.text}}",
+        "focus": true,
+        "separator": "\n\n",
+        "minLength": 2,
+        "maxLength": 4000
+      }
+    ]
+  }
+}

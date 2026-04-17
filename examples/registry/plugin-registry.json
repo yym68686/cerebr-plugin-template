@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "registryId": "template",
   "displayName": "Cerebr Example Registry",
-  "generatedAt": "2026-04-17T00:00:00Z",
+  "generatedAt": "2026-04-18T00:00:00Z",
   "plugins": [
     {
       "id": "template.prompt.concise",
@@ -14,8 +14,14 @@
       "permissions": [
         "prompt:extend"
       ],
+      "activationEvents": [
+        "app.startup"
+      ],
+      "contributionTypes": [
+        "promptFragments"
+      ],
       "compatibility": {
-        "versionRange": ">=2.4.84 <3.0.0"
+        "versionRange": ">=2.4.86 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -36,8 +42,14 @@
       "permissions": [
         "chat:write"
       ],
+      "activationEvents": [
+        "hook:onResponseError"
+      ],
+      "contributionTypes": [
+        "requestPolicies"
+      ],
       "compatibility": {
-        "versionRange": ">=2.4.84 <3.0.0"
+        "versionRange": ">=2.4.86 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -59,8 +71,14 @@
         "page:read"
       ],
       "requiresExtension": true,
+      "activationEvents": [
+        "page.ready"
+      ],
+      "contributionTypes": [
+        "pageExtractors"
+      ],
       "compatibility": {
-        "versionRange": ">=2.4.84 <3.0.0"
+        "versionRange": ">=2.4.86 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -84,8 +102,11 @@
         "shell:menu",
         "shell:page"
       ],
+      "activationEvents": [
+        "shell.ready"
+      ],
       "compatibility": {
-        "versionRange": ">=2.4.84 <3.0.0"
+        "versionRange": ">=2.4.86 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -108,8 +129,12 @@
         "bridge:send"
       ],
       "requiresExtension": true,
+      "activationEvents": [
+        "hook:onActionClicked",
+        "hook:onCommand"
+      ],
       "compatibility": {
-        "versionRange": ">=2.4.84 <3.0.0"
+        "versionRange": ">=2.4.86 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -118,6 +143,69 @@
       "install": {
         "mode": "package",
         "packageUrl": "plugins/template.background.focus-input/0.1.0/plugin.json"
+      }
+    },
+    {
+      "id": "template.page.selection-actions",
+      "kind": "declarative",
+      "scope": "page",
+      "displayName": "Selection Actions Template",
+      "description": "Add anchored page actions that import prompt scaffolds into Cerebr without shipping page runtime code.",
+      "latestVersion": "0.1.0",
+      "permissions": [
+        "page:selection",
+        "shell:input",
+        "ui:mount"
+      ],
+      "requiresExtension": true,
+      "activationEvents": [
+        "page.ready"
+      ],
+      "contributionTypes": [
+        "selectionActions"
+      ],
+      "compatibility": {
+        "versionRange": ">=2.4.86 <3.0.0"
+      },
+      "availability": {
+        "status": "active",
+        "reason": ""
+      },
+      "install": {
+        "mode": "package",
+        "packageUrl": "plugins/template.page.selection-actions/0.1.0/plugin.json"
+      }
+    },
+    {
+      "id": "template.shell.review-actions",
+      "kind": "declarative",
+      "scope": "shell",
+      "displayName": "Review Actions Template",
+      "description": "Add native shell buttons, menu items, and slash commands through declarative contributions.",
+      "latestVersion": "0.1.0",
+      "permissions": [
+        "shell:input",
+        "shell:menu",
+        "shell:page"
+      ],
+      "activationEvents": [
+        "shell.ready"
+      ],
+      "contributionTypes": [
+        "inputActions",
+        "menuItems",
+        "slashCommands"
+      ],
+      "compatibility": {
+        "versionRange": ">=2.4.86 <3.0.0"
+      },
+      "availability": {
+        "status": "active",
+        "reason": ""
+      },
+      "install": {
+        "mode": "package",
+        "packageUrl": "plugins/template.shell.review-actions/0.1.0/plugin.json"
       }
     }
   ]

@@ -1,21 +1,20 @@
 # Publishing And Install Notes
 
-This file explains how Cerebr currently loads plugins in developer mode and from a reviewed registry package.
+This file explains how Cerebr currently loads plugins in developer mode and from a reviewed marketplace package.
 
 ## Local developer sideload
 
-Local script sideload is intended for development and private testing.
+Local sideload is intended for development and private testing.
 
 Rules:
 
-- Developer mode must be enabled before local script plugins can run.
-- Drag the whole plugin folder into `Settings -> Plugins -> Developer`.
-- The folder must contain exactly one `plugin.json` at the plugin root.
-- Local sideload currently supports script plugins only.
-- Supported script scopes are `page`, `shell`, and `background`.
-- `background` plugins only run in the browser extension host and must set `requiresExtension: true`.
-- Dropped local `shell` plugins in the browser extension host run inside the static guest runtime and must be self-contained.
-- Updating a dropped local plugin still means dragging the updated folder again or using the refresh action in the developer tab.
+- developer mode must be enabled before local script plugins can run
+- drag the whole plugin folder into `Settings -> Plugins -> Developer`
+- the folder must contain exactly one `plugin.json` at the plugin root
+- local sideload currently supports script plugins only
+- supported script scopes are `page`, `shell`, and `background`
+- `background` plugins only run in the browser extension host and must set `requiresExtension: true`
+- dropped local `shell` plugins in the extension host run inside the static guest runtime and must stay self-contained
 
 ## Script entry resolution
 
@@ -23,53 +22,47 @@ For local sideloaded script plugins:
 
 - `script.entry` is resolved relative to `plugin.json`
 - relative imports inside the plugin folder stay relative to the plugin folder
-- same-origin absolute imports like `/src/plugin/shared/define-plugin.js` are only safe for host-loaded plugins
 - bare imports like `lodash` are rejected
 - cross-origin script imports are rejected
-- dropped local `shell` plugins in the extension host should use relative imports only
+- dropped local `shell` plugins should use relative imports only
 - dropped local `shell` plugins should keep structured assets as local JS/JSON modules instead of runtime fetches against `import.meta.url`
-- for settings, dashboards, and management views, prefer `shell.openPage({ view })` plus host-rendered schema over shipping a custom plugin page design
 
 For reviewed marketplace packages:
 
 - `plugin.json` is fetched from `install.packageUrl`
 - `script.entry` is resolved relative to that fetched `plugin.json`
 - `script.entry` must stay on the same origin as the package manifest
-- remote script packages should be self-contained and should not import host internals from the main Cerebr repository unless they are actually served from the same origin as the app
+- remote script packages should be self-contained
 
-For Cerebr's official reviewed marketplace, the source-of-truth registry lives in the separate `cerebr-plugins` repository. The main Cerebr repo only carries a bundled fallback snapshot under `statics/`.
+## Manifest guidance
 
-## Recommended package layout
+New packages should prefer:
 
-For a reviewed package or a static-hosted plugin:
+- `schemaVersion: 2`
+- explicit `activationEvents`
+- declarative `contributions` instead of legacy `declarative.type` when shipping a new data-only package
 
-```text
-plugins/<plugin-id>/<plugin-version>/
-  plugin.json
-  page.js | shell.js | background.js
-  other-local-files.js
-```
+## Declarative package notes
 
-For a registry:
+Legacy declarative types:
 
-```text
-plugin-registry.json
-plugins/<plugin-id>/<plugin-version>/plugin.json
-```
+- `prompt_fragment`
+- `request_policy`
+- `page_extractor`
 
-The example registry payload is in [../examples/registry/plugin-registry.json](../examples/registry/plugin-registry.json).
+Preferred v2 contribution groups:
+
+- `promptFragments`
+- `requestPolicies`
+- `pageExtractors`
+- `selectionActions`
+- `inputActions`
+- `menuItems`
+- `slashCommands`
 
 ## Registry payload
 
-The registry format needs:
-
-- `schemaVersion`
-- `registryId`
-- `displayName`
-- `generatedAt`
-- `plugins`
-
-Every plugin entry needs:
+Registry entries need:
 
 - `id`
 - `kind`
@@ -78,56 +71,30 @@ Every plugin entry needs:
 - `description`
 - `latestVersion`
 
-For `declarative` and `script` plugins, the registry entry must also include:
+Package entries for `script` and `declarative` plugins also need:
 
 - `install.mode: "package"`
 - `install.packageUrl`
 
-## Declarative package notes
+Optional metadata that the refactored host understands:
 
-Current declarative plugin types:
-
-- `prompt_fragment`
-- `request_policy`
-- `page_extractor`
-
-Scope rules:
-
-- `prompt_fragment`: `prompt` or `shell`
-- `request_policy`: `shell`
-- `page_extractor`: `page`
-
-See the example folders under [../examples](../examples).
-
-## Compatibility ranges
-
-The template uses:
-
-```text
->=2.4.84 <3.0.0
-```
-
-Update that range whenever:
-
-- Cerebr changes a runtime API your plugin uses
-- the host manifest version moves past your tested baseline
-- you want to explicitly drop old host versions
+- `activationEvents`
+- `contributionTypes`
 
 ## Suggested release checklist
 
 1. Run `npm run check`.
 2. Verify that `plugin.json` and the exported plugin object use the same id.
-3. Verify that your permissions match the APIs you actually call.
-4. Verify that `requiresExtension` is set correctly.
-5. Verify that `script.entry` points at the published file.
-6. If you publish a registry entry, make sure `install.packageUrl` points to the versioned `plugin.json`.
+3. Verify that your permissions match the APIs or declarative surfaces you actually use.
+4. Verify that `activationEvents` are narrow and intentional.
+5. Verify that `requiresExtension` is set correctly.
+6. Verify that `script.entry` points at the published file.
+7. If you publish a registry entry, make sure `install.packageUrl` points to the versioned `plugin.json`.
 
-## Notes for page plugins
+## Compatibility baseline
 
-If your plugin depends on page DOM, user selection, or content script behavior, it is usually safest to mark it with:
+The template examples currently target:
 
-```json
-"requiresExtension": true
+```text
+>=2.4.86 <3.0.0
 ```
-
-That matches the current template root plugin and the shipped page-oriented examples.

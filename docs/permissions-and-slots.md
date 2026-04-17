@@ -1,30 +1,38 @@
 # Permissions And Slots
 
-This file maps manifest permissions to the runtime APIs they unlock.
+This file maps manifest permissions to the runtime APIs and host surfaces they unlock.
+
+Prefer the resource-scoped permissions below for all new plugins. Legacy namespace permissions such as `page:selection`, `page:read`, `shell:input`, or `bridge:send` still resolve for compatibility, but they are no longer the recommended baseline.
 
 ## Page runtime permissions
 
-- `page:selection`
+- `page:selection:read`
   - `page.getSelection()`
   - `page.getSelectedText()`
   - `page.watchSelection(...)`
+
+- `page:selection:clear`
   - `page.clearSelection()`
 
-- `page:read`
+- `page:snapshot`
   - `page.getSnapshot(...)`
+
+- `page:extractors`
   - `page.registerExtractor(...)`
   - `page.listExtractors()`
+
+- `page:query`
   - `page.query(...)`
   - `page.queryAll(...)`
 
-- `page:observe`
+- `page:observe:selectors`
   - `page.watchSelectors(...)`
 
-- `site:read`
+- `site:query`
   - `site.query(...)`
   - `site.queryAll(...)`
 
-- `site:write`
+- `site:fill`
   - `site.fill(...)`
 
 - `site:click`
@@ -33,7 +41,7 @@ This file maps manifest permissions to the runtime APIs they unlock.
 - `site:observe`
   - `site.observe(...)`
 
-- `shell:input`
+- `shell:input:write`
   - `shell.open()`
   - `shell.toggle()`
   - `shell.focusInput()`
@@ -41,97 +49,159 @@ This file maps manifest permissions to the runtime APIs they unlock.
   - `shell.insertText(...)`
   - `shell.importText(...)`
 
-- `ui:mount`
+- `ui:anchored-action`
   - `ui.showAnchoredAction(...)`
+
+- `ui:slots`
   - `ui.mountSlot(...)`
 
-- `bridge:send`
-  - `bridge.send(...)`
+- `bridge:send:shell`
+  - `bridge.send('shell', ...)`
+
+- `bridge:send:background`
+  - `bridge.send('background', ...)`
+
+- `bridge:send:page`
+  - `bridge.send('page', ...)`
 
 ## Shell runtime permissions
 
-- `chat:read`
+- `chat:current`
   - `chat.getCurrentChat()`
+
+- `chat:messages`
   - `chat.getMessages()`
 
-- `chat:write`
+- `chat:send`
   - `chat.sendDraft()`
+
+- `chat:abort`
   - `chat.abort()`
+
+- `chat:regenerate`
   - `chat.regenerate(...)`
+
+- `chat:retry`
   - `chat.retry(...)`
+
+- `chat:cancel`
   - `chat.cancel(...)`
 
-- `prompt:extend`
+- `prompt:fragments`
   - `prompt.addFragment(...)`
-  - hook-level `ctx.prompt.addFragment(...)`
 
-- `prompt:write`
-  - alias for operations that can extend prompt state
-
-- `ui:mount`
+- `ui:slots`
   - `ui.mountSlot(...)`
 
-- `bridge:send`
-  - `bridge.send(...)`
+- `bridge:send:page`
+  - `bridge.send('page', ...)`
 
-- `shell:input`
+- `bridge:send:background`
+  - `bridge.send('background', ...)`
+
+- `shell:input:read`
+  - `editor.getDraft()`
+  - `editor.getDraftSnapshot()`
+  - `editor.hasDraft()`
+
+- `shell:input:write`
+  - `editor.focus()`
+  - `editor.blur()`
+  - `editor.setDraft(...)`
+  - `editor.insertText(...)`
+  - `editor.importText(...)`
+  - `editor.clear()`
+
+- `shell:input:mount`
   - `shell.mountInputAddon(...)`
+
+- `shell:input:actions`
   - `shell.setInputActions(...)`
   - `shell.clearInputActions()`
   - `shell.onInputAction(...)`
+
+- `shell:input:slash-commands`
   - `shell.setSlashCommands(...)`
   - `shell.clearSlashCommands()`
   - `shell.onSlashCommandEvent(...)`
+
+- `shell:input:modal`
   - `shell.showModal(...)`
   - `shell.updateModal(...)`
   - `shell.hideModal()`
+
+- `shell:input:layout`
   - `shell.requestLayoutSync()`
 
-- `shell:menu`
+- `shell:menu:items`
   - `shell.setMenuItems(...)`
   - `shell.clearMenuItems()`
   - `shell.onMenuAction(...)`
 
-- `shell:page`
+- `shell:page:control`
   - `shell.openPage(...)`
   - `shell.updatePage(...)`
   - `shell.closePage(...)`
   - `shell.onPageEvent(...)`
 
-- `storage:read`
+- `storage:read:local`
   - `storage.get(...)`
 
-- `storage:write`
+- `storage:write:local`
   - `storage.set(...)`
   - `storage.remove(...)`
 
-`ui.showToast(...)` and `editor.*` are currently available without extra manifest permissions.
-`i18n.getLocale()`, `i18n.getMessage(...)`, and `i18n.onLocaleChanged(...)` are currently available without extra manifest permissions.
+- `storage:read:sync`
+  - `storage.get(..., { area: 'sync' })`
+
+- `storage:write:sync`
+  - `storage.set(..., { area: 'sync' })`
+  - `storage.remove(..., { area: 'sync' })`
 
 ## Background runtime permissions
 
-- `tabs:read`
+- `tabs:query:active`
   - `browser.getCurrentTab()`
+  - `browser.queryTabs({ active: true, currentWindow: true })`
+
+- `tabs:get`
   - `browser.getTab(...)`
+
+- `tabs:query`
   - `browser.queryTabs(...)`
 
-- `tabs:write`
+- `tabs:reload`
   - `browser.reloadTab(...)`
 
 - `tabs:message`
   - `browser.sendMessage(...)`
 
-- `storage:read`
+- `storage:read:local`
   - `storage.get(...)`
 
-- `storage:write`
+- `storage:write:local`
   - `storage.set(...)`
   - `storage.remove(...)`
 
-- `bridge:send`
-  - `bridge.send(...)`
-  - `bridge.sendToTab(...)`
-  - `bridge.broadcast(...)`
+- `storage:read:sync`
+  - `storage.get(..., { area: 'sync' })`
+
+- `storage:write:sync`
+  - `storage.set(..., { area: 'sync' })`
+  - `storage.remove(..., { area: 'sync' })`
+
+- `bridge:send:page`
+  - `bridge.send('page', ...)`
+  - `bridge.sendToTab(tabId, 'page', ...)`
+  - `bridge.broadcast('page', ...)`
+
+- `bridge:send:shell`
+  - `bridge.send('shell', ...)`
+  - `bridge.sendToTab(tabId, 'shell', ...)`
+  - `bridge.broadcast('shell', ...)`
+
+- `bridge:send:background`
+  - `bridge.send('background', ...)`
 
 ## Slot ids
 
@@ -149,77 +219,31 @@ This file maps manifest permissions to the runtime APIs they unlock.
 - `page.floating`
 - `page.selection-bubble`
 
-Use `ui.getAvailableSlots()` if you want to inspect the slots exposed by the current host runtime.
+Use `ui.getAvailableSlots()` to inspect what the current host exposes.
 
-Use `shell.input.after` for compact trailing actions that live on the same row as the composer.
-Use `shell.input.row.after` for full-width toolbars or panels that should sit under the composer row.
-Use `shell.setInputActions()` when you want Cerebr to render native buttons under the composer and only send click events back to the plugin.
-Use `shell.setSlashCommands()` when you need native `/` command behavior in the composer and want the host to own keyboard, IME, and picker UI.
-Use `shell.setMenuItems()` when a plugin needs a first-level entry inside the Cerebr settings menu.
-Use `shell.openPage({ view })` when a plugin needs a settings page or management view that should live inside Cerebr's own page chrome and should be rendered natively by the host.
-Use `shell.updatePage({ view, viewStateKey, resetViewState })` to refresh host-rendered page content while keeping or resetting transient form state explicitly.
-Use `shell.showModal()` only when the interaction is genuinely modal and should temporarily block the chat area.
+## Activation strategy
 
-## Bridge targets
+Permissions answer "what can this plugin do".
+Activation events answer "when should this plugin start".
 
-Current bridge targets:
+Recommended pairings:
 
-- `page`
-- `shell`
-- `background`
+- page UI helpers: `page.ready`
+- shell setup/UI plugins: `shell.ready`
+- request modifiers: the specific hook they intercept
+- background command handlers: `hook:onActionClicked`, `hook:onCommand`
 
-## Built-in shell bridge commands
-
-These are the built-in commands already handled by the shell runtime:
-
-- `editor.focus`
-- `editor.setDraft`
-- `editor.insertText`
-- `editor.importText`
-
-Background plugins can send them back into a tab with:
-
-```js
-await ctx.bridge.sendToTab(tabId, 'shell', 'editor.focus');
-```
-
-Page plugins can use the higher-level `shell.*` helpers instead of sending those bridge commands directly.
-
-## Permissions strategy
-
-- Request the smallest permission set you need.
-- Keep `ui:mount` off data-only plugins.
-- Use `chat:write` only when you truly need retry, cancel, regenerate, or send control.
-- Treat `site:*` permissions as privileged page automation capabilities.
-- `background` plugins must set `requiresExtension: true`.
-
-## Capability normalization
-
-The host normalizes manifest permissions before runtime use.
-
-Current legacy aliases:
-
-- `prompt:write` -> `prompt:extend`
-- `tabs:active` -> `tabs:read`
-- `storage:local` -> `storage:read`, `storage:write`
-
-Namespace wildcards are also supported:
-
-- `shell:*`
-- `page:*`
-- `site:*`
-
-Wildcards are mostly for internal or experimental plugins. Prefer explicit capabilities for published plugins.
+Do not use `app.startup` unless the plugin really needs eager activation.
 
 ## Preferred UI decision tree
 
 For shell plugins, choose the first surface that fits:
 
-1. `shell.setInputActions()` for native composer buttons
-2. `shell.setSlashCommands()` for native `/` picker behavior in the composer
-3. `shell.setMenuItems()` for first-level navigation/settings entries
-4. `shell.openPage({ view })` for settings, dashboards, and management pages
-5. `shell.showModal()` only for truly modal interactions
-6. `shell.mountInputAddon()` only when the host cannot render the surface natively
+1. `shell.setInputActions()`
+2. `shell.setSlashCommands()`
+3. `shell.setMenuItems()`
+4. `shell.openPage({ view })`
+5. `shell.showModal()`
+6. `shell.mountInputAddon()`
 
 If a plugin page can be expressed as cards, forms, lists, notes, stats, and actions, use a host-rendered page instead of custom plugin CSS.

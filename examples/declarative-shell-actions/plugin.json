@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 2,
+  "id": "template.shell.review-actions",
+  "version": "0.1.0",
+  "kind": "declarative",
+  "scope": "shell",
+  "displayName": "Review Actions Template",
+  "description": "Add native shell buttons, menu items, and slash commands through declarative contributions.",
+  "defaultEnabled": true,
+  "permissions": [
+    "shell:input:write",
+    "shell:input:actions",
+    "shell:input:slash-commands",
+    "shell:menu:items",
+    "shell:page:control"
+  ],
+  "activationEvents": ["shell.ready"],
+  "compatibility": {
+    "versionRange": ">=2.4.86 <3.0.0"
+  },
+  "contributions": {
+    "inputActions": [
+      {
+        "id": "review",
+        "label": "Review",
+        "icon": "search",
+        "title": "Insert a review request scaffold",
+        "order": 10,
+        "execute": {
+          "type": "import_text",
+          "text": "Please review this change for bugs, behavioral regressions, and missing tests."
+        }
+      }
+    ],
+    "menuItems": [
+      {
+        "id": "review-playbook",
+        "label": "Review Playbook",
+        "icon": "book",
+        "order": 10,
+        "execute": {
+          "type": "open_page",
+          "page": {
+            "id": "template.shell.review-actions:playbook",
+            "title": "Review Playbook",
+            "subtitle": "Declarative shell page example",
+            "view": {
+              "sections": [
+                {
+                  "kind": "card",
+                  "title": "Checklist",
+                  "body": [
+                    {
+                      "kind": "list",
+                      "items": [
+                        {
+                          "id": "bugs",
+                          "title": "Bugs and regressions",
+                          "description": "Look for behavioral changes first."
+                        },
+                        {
+                          "id": "tests",
+                          "title": "Missing test coverage",
+                          "description": "Call out what still is not exercised."
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "slashCommands": [
+      {
+        "id": "audit",
+        "name": "audit",
+        "label": "Audit Request",
+        "description": "Insert a code review request scaffold.",
+        "prompt": "Please review this change for bugs, regressions, and missing tests.",
+        "order": 10
+      }
+    ]
+  }
+}

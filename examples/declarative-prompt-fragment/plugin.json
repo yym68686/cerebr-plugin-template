@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "id": "template.prompt.concise",
   "version": "0.1.0",
   "kind": "declarative",
@@ -8,15 +8,19 @@
   "description": "Append a concise-answer instruction to the system prompt.",
   "defaultEnabled": true,
   "permissions": [
-    "prompt:extend"
+    "prompt:fragments"
   ],
+  "activationEvents": ["app.startup"],
   "compatibility": {
-    "versionRange": ">=2.4.84 <3.0.0"
+    "versionRange": ">=2.4.86 <3.0.0"
   },
-  "declarative": {
-    "type": "prompt_fragment",
-    "placement": "system.append",
-    "content": "Prefer concise, high-signal answers unless the user explicitly asks for more depth.",
-    "priority": 0
+  "contributions": {
+    "promptFragments": [
+      {
+        "content": "Prefer concise, high-signal answers unless the user explicitly asks for more depth.",
+        "placement": "system.append",
+        "priority": 0
+      }
+    ]
   }
 }
