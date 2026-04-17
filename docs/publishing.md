@@ -14,23 +14,28 @@ Rules:
 - Local sideload currently supports script plugins only.
 - Supported script scopes are `page`, `shell`, and `background`.
 - `background` plugins only run in the browser extension host and must set `requiresExtension: true`.
-- If you installed a plugin by dragging a folder, updating it means dragging the updated folder again.
+- Dropped local `shell` plugins in the browser extension host run inside the static guest runtime and must be self-contained.
+- Updating a dropped local plugin still means dragging the updated folder again or using the refresh action in the developer tab.
 
 ## Script entry resolution
 
-For local sideloaded bundles:
+For local sideloaded script plugins:
 
 - `script.entry` is resolved relative to `plugin.json`
-- relative imports inside the plugin folder are bundled and rewritten
-- same-origin absolute imports like `/src/plugin/shared/define-plugin.js` are allowed
+- relative imports inside the plugin folder stay relative to the plugin folder
+- same-origin absolute imports like `/src/plugin/shared/define-plugin.js` are only safe for host-loaded plugins
 - bare imports like `lodash` are rejected
 - cross-origin script imports are rejected
+- dropped local `shell` plugins in the extension host should use relative imports only
+- dropped local `shell` plugins should keep structured assets as local JS/JSON modules instead of runtime fetches against `import.meta.url`
+- for settings, dashboards, and management views, prefer `shell.openPage({ view })` plus host-rendered schema over shipping a custom plugin page design
 
 For reviewed marketplace packages:
 
 - `plugin.json` is fetched from `install.packageUrl`
 - `script.entry` is resolved relative to that fetched `plugin.json`
 - `script.entry` must stay on the same origin as the package manifest
+- remote script packages should be self-contained and should not import host internals from the main Cerebr repository unless they are actually served from the same origin as the app
 
 ## Recommended package layout
 
@@ -97,7 +102,7 @@ See the example folders under [../examples](../examples).
 The template uses:
 
 ```text
->=2.4.75 <3.0.0
+>=2.4.84 <3.0.0
 ```
 
 Update that range whenever:

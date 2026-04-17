@@ -1,5 +1,3 @@
-import { definePlugin } from '/src/plugin/shared/define-plugin.js';
-
 const PLUGIN_ID = 'template.page.selection-helper';
 const MIN_SELECTION_LENGTH = 2;
 const MAX_SELECTION_LENGTH = 4000;
@@ -22,7 +20,7 @@ function shouldShowAction(selection) {
     return true;
 }
 
-export default definePlugin({
+export default {
     id: PLUGIN_ID,
     displayName: 'Selection Helper Template',
     setup(api) {
@@ -68,4 +66,4 @@ export default definePlugin({
             hideAction();
         };
     },
-});
+};

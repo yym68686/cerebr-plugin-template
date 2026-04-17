@@ -74,7 +74,39 @@ This file maps manifest permissions to the runtime APIs they unlock.
 - `bridge:send`
   - `bridge.send(...)`
 
+- `shell:input`
+  - `shell.mountInputAddon(...)`
+  - `shell.setInputActions(...)`
+  - `shell.clearInputActions()`
+  - `shell.onInputAction(...)`
+  - `shell.setSlashCommands(...)`
+  - `shell.clearSlashCommands()`
+  - `shell.onSlashCommandEvent(...)`
+  - `shell.showModal(...)`
+  - `shell.updateModal(...)`
+  - `shell.hideModal()`
+  - `shell.requestLayoutSync()`
+
+- `shell:menu`
+  - `shell.setMenuItems(...)`
+  - `shell.clearMenuItems()`
+  - `shell.onMenuAction(...)`
+
+- `shell:page`
+  - `shell.openPage(...)`
+  - `shell.updatePage(...)`
+  - `shell.closePage(...)`
+  - `shell.onPageEvent(...)`
+
+- `storage:read`
+  - `storage.get(...)`
+
+- `storage:write`
+  - `storage.set(...)`
+  - `storage.remove(...)`
+
 `ui.showToast(...)` and `editor.*` are currently available without extra manifest permissions.
+`i18n.getLocale()`, `i18n.getMessage(...)`, and `i18n.onLocaleChanged(...)` are currently available without extra manifest permissions.
 
 ## Background runtime permissions
 
@@ -109,6 +141,7 @@ This file maps manifest permissions to the runtime APIs they unlock.
 - `shell.chat.after`
 - `shell.input.before`
 - `shell.input.after`
+- `shell.input.row.after`
 - `shell.settings.section`
 
 ### Page slots
@@ -117,6 +150,15 @@ This file maps manifest permissions to the runtime APIs they unlock.
 - `page.selection-bubble`
 
 Use `ui.getAvailableSlots()` if you want to inspect the slots exposed by the current host runtime.
+
+Use `shell.input.after` for compact trailing actions that live on the same row as the composer.
+Use `shell.input.row.after` for full-width toolbars or panels that should sit under the composer row.
+Use `shell.setInputActions()` when you want Cerebr to render native buttons under the composer and only send click events back to the plugin.
+Use `shell.setSlashCommands()` when you need native `/` command behavior in the composer and want the host to own keyboard, IME, and picker UI.
+Use `shell.setMenuItems()` when a plugin needs a first-level entry inside the Cerebr settings menu.
+Use `shell.openPage({ view })` when a plugin needs a settings page or management view that should live inside Cerebr's own page chrome and should be rendered natively by the host.
+Use `shell.updatePage({ view, viewStateKey, resetViewState })` to refresh host-rendered page content while keeping or resetting transient form state explicitly.
+Use `shell.showModal()` only when the interaction is genuinely modal and should temporarily block the chat area.
 
 ## Bridge targets
 
@@ -150,3 +192,34 @@ Page plugins can use the higher-level `shell.*` helpers instead of sending those
 - Use `chat:write` only when you truly need retry, cancel, regenerate, or send control.
 - Treat `site:*` permissions as privileged page automation capabilities.
 - `background` plugins must set `requiresExtension: true`.
+
+## Capability normalization
+
+The host normalizes manifest permissions before runtime use.
+
+Current legacy aliases:
+
+- `prompt:write` -> `prompt:extend`
+- `tabs:active` -> `tabs:read`
+- `storage:local` -> `storage:read`, `storage:write`
+
+Namespace wildcards are also supported:
+
+- `shell:*`
+- `page:*`
+- `site:*`
+
+Wildcards are mostly for internal or experimental plugins. Prefer explicit capabilities for published plugins.
+
+## Preferred UI decision tree
+
+For shell plugins, choose the first surface that fits:
+
+1. `shell.setInputActions()` for native composer buttons
+2. `shell.setSlashCommands()` for native `/` picker behavior in the composer
+3. `shell.setMenuItems()` for first-level navigation/settings entries
+4. `shell.openPage({ view })` for settings, dashboards, and management pages
+5. `shell.showModal()` only for truly modal interactions
+6. `shell.mountInputAddon()` only when the host cannot render the surface natively
+
+If a plugin page can be expressed as cards, forms, lists, notes, stats, and actions, use a host-rendered page instead of custom plugin CSS.

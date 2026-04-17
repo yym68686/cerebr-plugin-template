@@ -11,7 +11,7 @@
     "chat:write"
   ],
   "compatibility": {
-    "versionRange": ">=2.4.75 <3.0.0"
+    "versionRange": ">=2.4.84 <3.0.0"
   },
   "declarative": {
     "type": "request_policy",

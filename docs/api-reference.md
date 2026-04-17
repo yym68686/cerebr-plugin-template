@@ -4,12 +4,12 @@ This file documents the current Cerebr plugin runtime contract exposed by the ho
 
 ## Script plugin module contract
 
-Every script plugin must export a plugin object created by `definePlugin(...)`.
+Every script plugin must export a plugin object.
+
+The safest default is a plain self-contained module:
 
 ```js
-import { definePlugin } from '/src/plugin/shared/define-plugin.js';
-
-export default definePlugin({
+export default {
   id: 'your.plugin.id',
   displayName: 'Optional display name',
   priority: 0,
@@ -19,8 +19,10 @@ export default definePlugin({
   setup(api) {
     return () => {};
   }
-});
+};
 ```
+
+`definePlugin(...)` is optional. If you use a helper wrapper, bundle it into your own plugin folder. Do not import Cerebr private helpers from `/src/...` in dropped local `shell` plugins.
 
 ## Plugin object fields
 
@@ -33,6 +35,17 @@ export default definePlugin({
   - a cleanup function
   - an object with `dispose()`
   - nothing
+
+## Manifest localization keys
+
+`plugin.json` and registry entries can also carry host-facing localization keys:
+
+- `nameKey`
+- `descriptionKey`
+- `availability.reasonKey` in registry entries
+- `declarative.contentKey` for prompt fragments
+
+Use these when the actual plugin package is distributed with locale resources and the host should resolve text through its i18n layer.
 
 ## Default hook timeouts
 
@@ -104,6 +117,10 @@ export default definePlugin({
 
 ### Shell script plugins
 
+`api.browser`
+
+- `getCurrentTab()`
+
 `api.editor`
 
 - `focus()`
@@ -138,9 +155,24 @@ export default definePlugin({
 - `mountSlot(slotId, renderer, options)`
 - `getAvailableSlots()`
 
+Use `shell.input.after` for compact inline controls.
+Use `shell.input.row.after` for full-width composer toolbars or panels.
+
 `api.bridge`
 
 - `send(target, command, payload)`
+
+`api.storage`
+
+- `get(keys, options)`
+- `set(items, options)`
+- `remove(keys, options)`
+
+`api.i18n`
+
+- `getLocale()`
+- `getMessage(key, substitutions, fallback)`
+- `onLocaleChanged(callback, options)`
 
 `api.shell`
 
@@ -148,6 +180,166 @@ export default definePlugin({
 - `open()`
 - `close()`
 - `toggle()`
+- `mountInputAddon(renderer, options)`
+- `setInputActions(actions)`
+- `clearInputActions()`
+- `onInputAction(callback)`
+- `setSlashCommands(commands, options)`
+- `clearSlashCommands()`
+- `onSlashCommandEvent(callback)`
+- `setMenuItems(items)`
+- `clearMenuItems()`
+- `onMenuAction(callback)`
+- `openPage(page)`
+- `updatePage(page)`
+- `closePage(reason)`
+- `onPageEvent(callback)`
+- `showModal(options)`
+- `updateModal(options)`
+- `hideModal()`
+- `requestLayoutSync()`
+- `observeTheme(callback, options)`
+- `getThemeSnapshot()`
+
+### Host-rendered shell surfaces
+
+#### `shell.setInputActions(actions)`
+
+Each action item can include:
+
+- `id`
+- `label`
+- `icon`
+- `title`
+- `order`
+- `disabled`
+- `variant` when supported by the current host
+
+Use this when you want Cerebr to render native buttons below the composer and send clicks back through `onInputAction(...)`.
+
+#### `shell.setSlashCommands(commands, options)`
+
+Use this when your plugin needs `/` command behavior inside the composer and you want the host to own:
+
+- suggestion UI
+- keyboard selection with `ArrowUp`, `ArrowDown`, `Enter`, `Escape`
+- IME/composition safety
+- draft replacement when a command is selected
+
+Each slash command descriptor can include:
+
+- `id`
+- `name`
+- `label`
+- `description`
+- `aliases`
+- `prompt`
+- `separator`
+- `order`
+- `disabled`
+
+Options currently support:
+
+- `emptyText`
+
+Selection events come back through `onSlashCommandEvent(callback)`.
+
+#### `shell.setMenuItems(items)`
+
+Each menu item can include:
+
+- `id`
+- `label`
+- `icon`
+- `title`
+- `order`
+- `disabled`
+
+Use this for first-level entries inside the Cerebr settings/navigation menu.
+
+`shell.openPage(page)` and `shell.updatePage(page)` accept either:
+
+- a mount-backed page: Cerebr reuses the plugin's mounted shell surface as the page body
+- a host-rendered page: pass `page.view` so Cerebr renders cards, forms, lists, and actions directly in the host document
+
+Useful page fields:
+
+- `id`
+- `title`
+- `subtitle`
+- `view`
+- `viewStateKey`
+- `resetViewState`
+
+Recommended page strategy:
+
+- put page title/subtitle in `page.title` and `page.subtitle`
+- prefer `card` sections for most settings pages
+- use `columns` only when the host page is genuinely wide enough for split-pane management
+- avoid duplicating the shell page header with another large in-page title block
+
+Host-rendered page sections:
+
+- `card`
+- `columns`
+- `hero` (use sparingly; prefer the shell page header for title/subtitle)
+
+Host-rendered content nodes:
+
+- `text`
+- `note`
+- `stats`
+- `badges`
+- `actions`
+- `form`
+- `list`
+
+Host-rendered form field descriptors support:
+
+- `id`
+- `label`
+- `type`
+- `value`
+- `placeholder`
+- `description`
+- `disabled`
+- `span`
+- `rows` for `textarea`
+- `options` for `select`
+
+Host-rendered action descriptors support:
+
+- `id`
+- `label`
+- `icon`
+- `title`
+- `variant`
+- `kind`
+- `disabled`
+- `confirm`
+- `accept`
+- `multiple`
+- `data`
+
+Host-rendered list items support:
+
+- `id`
+- `title`
+- `description`
+- `meta`
+- `selected`
+- `badges`
+- `actionId`
+- `actions`
+
+Host-rendered pages automatically use Cerebr's native settings-page design system. Plugins should declare structure and interaction state, not custom page CSS.
+
+Plugin permissions are normalized by the host. Legacy aliases such as `tabs:active` and `storage:local` are expanded to canonical capability names automatically, and namespace wildcards like `shell:*` or `page:*` are supported for advanced internal plugins.
+
+`onPageEvent(callback)` can receive:
+
+- lifecycle events: `open`, `close`
+- interaction events from host-rendered pages: `action`, `change`
 
 ### Background script plugins
 
@@ -323,7 +515,7 @@ All hook contexts include:
 Additional context objects depend on the host:
 
 - page hooks receive `page`, `site`, `ui`, `bridge`, `shell`
-- shell hooks receive `editor`, `chat`, `prompt`, `ui`, `bridge`, `shell`
+- shell hooks receive `browser`, `editor`, `chat`, `prompt`, `ui`, `bridge`, `storage`, `i18n`, `shell`
 - background hooks receive `browser`, `storage`, `bridge`, `background`
 
 Shell hook contexts also expose `directives` used internally for retry, cancel, and per-request prompt fragments.
@@ -334,6 +526,7 @@ Prompt fragments support:
 
 - `id`
 - `content`
+- `contentKey`
 - `placement`: `system.prepend` or `system.append`
 - `priority`
 
@@ -360,3 +553,4 @@ You can register them in two ways:
 - Higher priority plugins start first and run first.
 - Hook failures are isolated and logged by the host runtime.
 - If a permission is missing, the runtime throws at the moment the protected API is used.
+- For dropped local `shell` plugins, prefer local JS/JSON module imports over `fetch(new URL('./file.json', import.meta.url))` so the guest runtime can keep the package self-contained.

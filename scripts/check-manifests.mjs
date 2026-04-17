@@ -118,8 +118,9 @@ function validatePluginManifest(manifest, filePath) {
                 errors
             );
             assert(
-                String(declarative?.content ?? '').trim().length > 0,
-                `${relativeFile}: prompt_fragment needs content`,
+                String(declarative?.content ?? '').trim().length > 0
+                    || String(declarative?.contentKey ?? '').trim().length > 0,
+                `${relativeFile}: prompt_fragment needs content or contentKey`,
                 errors
             );
         }

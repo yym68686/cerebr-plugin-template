@@ -1,5 +1,3 @@
-import { definePlugin } from '/src/plugin/shared/define-plugin.js';
-
 const PLUGIN_ID = 'template.background.focus-input';
 
 async function focusShellInput(ctx, tabId = null) {
@@ -15,7 +13,7 @@ async function focusShellInput(ctx, tabId = null) {
     await ctx.bridge.sendToTab(resolvedTabId, 'shell', 'editor.focus');
 }
 
-export default definePlugin({
+export default {
     id: PLUGIN_ID,
     displayName: 'Focus Input Template',
     setup() {},
@@ -29,4 +27,4 @@ export default definePlugin({
 
         await focusShellInput(ctx);
     },
-});
+};

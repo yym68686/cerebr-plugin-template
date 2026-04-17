@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "registryId": "template",
   "displayName": "Cerebr Example Registry",
-  "generatedAt": "2026-04-16T00:00:00Z",
+  "generatedAt": "2026-04-17T00:00:00Z",
   "plugins": [
     {
       "id": "template.prompt.concise",
@@ -15,7 +15,7 @@
         "prompt:extend"
       ],
       "compatibility": {
-        "versionRange": ">=2.4.75 <3.0.0"
+        "versionRange": ">=2.4.84 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -37,7 +37,7 @@
         "chat:write"
       ],
       "compatibility": {
-        "versionRange": ">=2.4.75 <3.0.0"
+        "versionRange": ">=2.4.84 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -60,7 +60,7 @@
       ],
       "requiresExtension": true,
       "compatibility": {
-        "versionRange": ">=2.4.75 <3.0.0"
+        "versionRange": ">=2.4.84 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -76,14 +76,16 @@
       "kind": "script",
       "scope": "shell",
       "displayName": "Quick Insert Template",
-      "description": "A shell plugin that mounts a small input action and adds a persistent prompt fragment.",
+      "description": "A shell plugin that uses host-native input actions, native slash commands, a first-level menu item, and a host page.",
       "latestVersion": "0.1.0",
       "permissions": [
         "prompt:extend",
-        "ui:mount"
+        "shell:input",
+        "shell:menu",
+        "shell:page"
       ],
       "compatibility": {
-        "versionRange": ">=2.4.75 <3.0.0"
+        "versionRange": ">=2.4.84 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -107,7 +109,7 @@
       ],
       "requiresExtension": true,
       "compatibility": {
-        "versionRange": ">=2.4.75 <3.0.0"
+        "versionRange": ">=2.4.84 <3.0.0"
       },
       "availability": {
         "status": "active",
