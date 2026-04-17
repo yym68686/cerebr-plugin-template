@@ -71,6 +71,7 @@ Prefer the resource-scoped permissions below for all new plugins. Legacy namespa
 
 - `chat:messages`
   - `chat.getMessages()`
+  - `chat.getRenderedTranscript()`
 
 - `chat:send`
   - `chat.sendDraft()`

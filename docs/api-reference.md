@@ -119,6 +119,7 @@ Common values:
 
 - `getCurrentChat()`
 - `getMessages()`
+- `getRenderedTranscript()`
 - `sendDraft()`
 - `abort()`
 - `regenerate(messageElement)`
