@@ -37,6 +37,8 @@ For reviewed marketplace packages:
 - `script.entry` must stay on the same origin as the package manifest
 - remote script packages should be self-contained and should not import host internals from the main Cerebr repository unless they are actually served from the same origin as the app
 
+For Cerebr's official reviewed marketplace, the source-of-truth registry lives in the separate `cerebr-plugins` repository. The main Cerebr repo only carries a bundled fallback snapshot under `statics/`.
+
 ## Recommended package layout
 
 For a reviewed package or a static-hosted plugin:
