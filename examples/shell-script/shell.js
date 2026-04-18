@@ -176,11 +176,12 @@ function createDraftText(preset = 'short') {
 export default {
     id: PLUGIN_ID,
     displayName: 'Quick Insert Template',
-    setup(api) {
+    setup({ api, diagnostics }) {
         let pageState = {
             source: 'menu',
             preset: 'short',
         };
+        void diagnostics;
 
         const fragmentHandle = api.prompt.addFragment({
             id: `${PLUGIN_ID}:default-fragment`,

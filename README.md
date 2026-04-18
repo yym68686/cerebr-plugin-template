@@ -116,3 +116,7 @@ If you want npm packages or TypeScript, bundle them into local files before inst
 - compatibility range in template examples: `>=2.4.86 <3.0.0`
 
 Update those ranges when the host runtime changes.
+
+## License
+
+This template follows Cerebr and is licensed under the GPLv3 License. See [LICENSE](./LICENSE).

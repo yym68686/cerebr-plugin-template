@@ -1,6 +1,7 @@
 {
   "name": "cerebr-plugin-template",
   "private": true,
+  "license": "GPL-3.0-only",
   "type": "module",
   "scripts": {
     "check": "node ./scripts/check-manifests.mjs"

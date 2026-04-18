@@ -16,7 +16,9 @@ async function focusShellInput(ctx, tabId = null) {
 export default {
     id: PLUGIN_ID,
     displayName: 'Focus Input Template',
-    setup() {},
+    setup(context) {
+        void context;
+    },
     async onActionClicked(tab, ctx) {
         await focusShellInput(ctx, tab?.id);
     },

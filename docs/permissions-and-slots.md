@@ -4,6 +4,12 @@ This file maps manifest permissions to the runtime APIs and host surfaces they u
 
 Prefer the resource-scoped permissions below for all new plugins. Legacy namespace permissions such as `page:selection`, `page:read`, `shell:input`, or `bridge:send` still resolve for compatibility, but they are no longer the recommended baseline.
 
+Runtime notes:
+
+- Cerebr runs a preflight check before activation and refuses obvious host/runtime mismatches early.
+- Prefer host-provided capability APIs such as `context.api.ui.copyText(...)` or `context.api.chat.getRenderedTranscript()` over direct browser globals.
+- Web-hosted local bundle plugins now load through stable `data:` module URLs by default; do not depend on `blob:` URL lifetime.
+
 ## Page runtime permissions
 
 - `page:selection:read`

@@ -23,7 +23,7 @@ function shouldShowAction(selection) {
 export default {
     id: PLUGIN_ID,
     displayName: 'Selection Helper Template',
-    setup(api) {
+    setup({ api }) {
         let actionHandle = null;
 
         const hideAction = () => {

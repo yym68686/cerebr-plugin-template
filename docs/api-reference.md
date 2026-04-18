@@ -14,7 +14,7 @@ export default {
   hookTimeouts: {
     onBeforeSend: 1600
   },
-  setup(api) {
+  setup(context) {
     return () => {};
   }
 };
@@ -29,13 +29,39 @@ export default {
 - `priority`: optional number, higher values run first
 - `activationEvents`: optional runtime fallback when the manifest does not provide them
 - `hookTimeouts`: optional per-hook timeout override
-- `setup(api)`: required
+- `setup(context)`: required
 
-`setup(api)` may return:
+`setup(context)` may return:
 
 - a cleanup function
 - an object with `dispose()`
 - nothing
+
+## Unified runtime context
+
+`setup(context)` receives a stable runtime context object:
+
+- `context.api`: the namespaced host services (`page`, `shell`, `chat`, `ui`, ...)
+- `context.capabilities`: alias of `context.api`
+- `context.permissions`: `{ granted, has(), assert() }`
+- `context.plugin`: normalized plugin metadata
+- `context.runtime`: runtime metadata such as `host`, `isExtension`, `isGuest`
+- `context.env`: normalized host flags for fast checks
+- `context.diagnostics`: preflight and host diagnostics
+
+For compatibility, Cerebr still exposes the service namespaces at the top level. These are equivalent:
+
+```js
+setup({ api }) {
+  api.shell.open();
+}
+```
+
+```js
+setup({ shell }) {
+  shell.open();
+}
+```
 
 ## Manifest-level activation
 
@@ -55,7 +81,7 @@ Common values:
 
 ## Page script APIs
 
-`api.page`
+`context.api.page`
 
 - `getSelection()`
 - `getSelectedText()`
@@ -69,7 +95,7 @@ Common values:
 - `queryAll(selector)`
 - `getMessage(key, substitutions, fallback)`
 
-`api.site`
+`context.api.site`
 
 - `query(selector)`
 - `queryAll(selector)`
@@ -77,13 +103,13 @@ Common values:
 - `click(selector)`
 - `observe(selector, callback, options)`
 
-`api.ui`
+`context.api.ui`
 
 - `showAnchoredAction(config)`
 - `mountSlot(slotId, renderer, options)`
 - `getAvailableSlots()`
 
-`api.shell`
+`context.api.shell`
 
 - `isOpen()`
 - `open()`
@@ -93,17 +119,17 @@ Common values:
 - `insertText(text, options)`
 - `importText(text, options)`
 
-`api.bridge`
+`context.api.bridge`
 
 - `send(target, command, payload)`
 
 ## Shell script APIs
 
-`api.browser`
+`context.api.browser`
 
 - `getCurrentTab()`
 
-`api.editor`
+`context.api.editor`
 
 - `focus()`
 - `blur()`
@@ -115,7 +141,7 @@ Common values:
 - `importText(text, options)`
 - `clear()`
 
-`api.chat`
+`context.api.chat`
 
 - `getCurrentChat()`
 - `getMessages()`
@@ -126,36 +152,36 @@ Common values:
 - `retry(reason, options)`
 - `cancel(reason)`
 
-`api.prompt`
+`context.api.prompt`
 
 - `addFragment(fragment)`
 - `removeFragment(fragmentId)`
 - `listFragments()`
 
-`api.ui`
+`context.api.ui`
 
 - `showToast(message, options)`
 - `copyText(text)`
 - `mountSlot(slotId, renderer, options)`
 - `getAvailableSlots()`
 
-`api.bridge`
+`context.api.bridge`
 
 - `send(target, command, payload)`
 
-`api.storage`
+`context.api.storage`
 
 - `get(keys, options)`
 - `set(items, options)`
 - `remove(keys, options)`
 
-`api.i18n`
+`context.api.i18n`
 
 - `getLocale()`
 - `getMessage(key, substitutions, fallback)`
 - `onLocaleChanged(callback, options)`
 
-`api.shell`
+`context.api.shell`
 
 - `isVisible()`
 - `open()`
@@ -184,7 +210,7 @@ Common values:
 
 ## Background script APIs
 
-`api.browser`
+`context.api.browser`
 
 - `getCurrentTab()`
 - `getTab(tabId)`
@@ -192,13 +218,13 @@ Common values:
 - `reloadTab(tabId, options)`
 - `sendMessage(tabId, message)`
 
-`api.storage`
+`context.api.storage`
 
 - `get(keys, options)`
 - `set(items, options)`
 - `remove(keys, options)`
 
-`api.bridge`
+`context.api.bridge`
 
 - `send(target, command, payload)`
 - `sendToTab(tabId, target, command, payload)`
