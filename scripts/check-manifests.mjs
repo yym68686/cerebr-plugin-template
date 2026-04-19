@@ -23,6 +23,7 @@ const contributionTypes = new Set([
     'menuItems',
     'slashCommands',
 ]);
+const ABSOLUTE_URL_PATTERN = /^[a-zA-Z][a-zA-Z\d+\-.]*:/;
 
 function toPosix(relativePath) {
     return relativePath.split(path.sep).join('/');
@@ -77,6 +78,62 @@ function validateStringArray(value, label, errors) {
             errors
         );
     });
+}
+
+function hasNonEmptyString(value) {
+    return typeof value === 'string' && value.trim().length > 0;
+}
+
+function validatePluginI18n(i18n, manifestFilePath, label, errors) {
+    assert(isObject(i18n), `${label} must be an object`, errors);
+    if (!isObject(i18n)) {
+        return;
+    }
+
+    if (i18n.defaultLocale !== undefined) {
+        assert(hasNonEmptyString(i18n.defaultLocale), `${label}.defaultLocale must be a non-empty string`, errors);
+    }
+
+    if (i18n.messages !== undefined) {
+        assert(isObject(i18n.messages), `${label}.messages must be an object`, errors);
+        if (isObject(i18n.messages)) {
+            Object.entries(i18n.messages).forEach(([locale, table]) => {
+                const localeLabel = `${label}.messages.${locale}`;
+                assert(hasNonEmptyString(locale), `${localeLabel} locale key must be non-empty`, errors);
+                assert(isObject(table), `${localeLabel} must be an object`, errors);
+                if (!isObject(table)) {
+                    return;
+                }
+
+                Object.entries(table).forEach(([key, value]) => {
+                    const messageLabel = `${localeLabel}.${key}`;
+                    assert(hasNonEmptyString(key), `${messageLabel} key must be non-empty`, errors);
+                    const validValue = hasNonEmptyString(value)
+                        || (isObject(value) && hasNonEmptyString(value.message));
+                    assert(validValue, `${messageLabel} must be a string or { message } object`, errors);
+                });
+            });
+        }
+    }
+
+    if (i18n.locales !== undefined) {
+        assert(isObject(i18n.locales), `${label}.locales must be an object`, errors);
+        if (isObject(i18n.locales)) {
+            Object.entries(i18n.locales).forEach(([locale, ref]) => {
+                const localeLabel = `${label}.locales.${locale}`;
+                assert(hasNonEmptyString(locale), `${localeLabel} locale key must be non-empty`, errors);
+                assert(hasNonEmptyString(ref), `${localeLabel} must be a non-empty string`, errors);
+                if (!hasNonEmptyString(ref)) {
+                    return;
+                }
+
+                if (!ABSOLUTE_URL_PATTERN.test(ref) && !String(ref).startsWith('/')) {
+                    const resolvedRef = path.resolve(path.dirname(manifestFilePath), String(ref).trim());
+                    assert(fs.existsSync(resolvedRef), `${localeLabel} is missing file "${ref}"`, errors);
+                }
+            });
+        }
+    }
 }
 
 function validatePromptFragments(value, label, errors) {
@@ -187,13 +244,25 @@ function validateShellExecute(execute, label, errors) {
     assert(shellExecuteTypes.has(type), `${label}.type is invalid`, errors);
 
     if (type === 'import_text' || type === 'insert_text' || type === 'set_draft') {
-        const text = String(execute.text ?? execute.prompt ?? execute.template ?? '').trim();
-        assert(text.length > 0, `${label} requires text, prompt, or template`, errors);
+        const hasText = (
+            hasNonEmptyString(execute.text)
+            || hasNonEmptyString(execute.textKey)
+            || hasNonEmptyString(execute.prompt)
+            || hasNonEmptyString(execute.promptKey)
+            || hasNonEmptyString(execute.template)
+            || hasNonEmptyString(execute.templateKey)
+        );
+        assert(hasText, `${label} requires text/textKey, prompt/promptKey, or template/templateKey`, errors);
     }
 
     if (type === 'show_toast') {
-        const message = String(execute.message ?? execute.text ?? '').trim();
-        assert(message.length > 0, `${label} requires message or text`, errors);
+        const hasMessage = (
+            hasNonEmptyString(execute.message)
+            || hasNonEmptyString(execute.messageKey)
+            || hasNonEmptyString(execute.text)
+            || hasNonEmptyString(execute.textKey)
+        );
+        assert(hasMessage, `${label} requires message/messageKey or text/textKey`, errors);
     }
 
     if (type === 'open_page') {
@@ -207,9 +276,17 @@ function validateSelectionAction(action, label, errors) {
         return;
     }
 
-    assert(String(action.label ?? '').trim().length > 0, `${label}.label is required`, errors);
-    const prompt = String(action.prompt ?? action.text ?? action.promptTemplate ?? '').trim();
-    assert(prompt.length > 0, `${label} requires prompt, text, or promptTemplate`, errors);
+    const hasLabel = hasNonEmptyString(action.label) || hasNonEmptyString(action.labelKey);
+    const hasPrompt = (
+        hasNonEmptyString(action.prompt)
+        || hasNonEmptyString(action.promptKey)
+        || hasNonEmptyString(action.text)
+        || hasNonEmptyString(action.textKey)
+        || hasNonEmptyString(action.promptTemplate)
+        || hasNonEmptyString(action.promptTemplateKey)
+    );
+    assert(hasLabel, `${label}.label or labelKey is required`, errors);
+    assert(hasPrompt, `${label} requires prompt/promptKey, text/textKey, or promptTemplate/promptTemplateKey`, errors);
 }
 
 function validateInputAction(action, label, errors) {
@@ -219,9 +296,10 @@ function validateInputAction(action, label, errors) {
     }
 
     const id = String(action.id ?? '').trim();
-    const labelValue = String(action.label ?? '').trim();
-    const icon = String(action.icon ?? '').trim();
-    assert(id.length > 0 || labelValue.length > 0 || icon.length > 0, `${label} needs id and label/icon`, errors);
+    const hasLabel = hasNonEmptyString(action.label) || hasNonEmptyString(action.labelKey);
+    const hasIcon = hasNonEmptyString(action.icon) || hasNonEmptyString(action.iconSvg);
+    assert(id.length > 0, `${label}.id is required`, errors);
+    assert(hasLabel || hasIcon, `${label} needs label/labelKey or icon/iconSvg`, errors);
     validateShellExecute(action.execute, `${label}.execute`, errors);
 }
 
@@ -231,7 +309,11 @@ function validateMenuItem(item, label, errors) {
         return;
     }
 
-    assert(String(item.label ?? '').trim().length > 0, `${label}.label is required`, errors);
+    assert(hasNonEmptyString(item.id), `${label}.id is required`, errors);
+    assert(hasNonEmptyString(item.label) || hasNonEmptyString(item.labelKey), `${label}.label or labelKey is required`, errors);
+    if (item.iconSvg !== undefined) {
+        assert(typeof item.iconSvg === 'string', `${label}.iconSvg must be a string`, errors);
+    }
     validateShellExecute(item.execute, `${label}.execute`, errors);
 }
 
@@ -242,8 +324,15 @@ function validateSlashCommand(command, label, errors) {
     }
 
     assert(String(command.name ?? '').trim().length > 0, `${label}.name is required`, errors);
-    const prompt = String(command.prompt ?? command.text ?? command.template ?? '').trim();
-    assert(prompt.length > 0, `${label} requires prompt, text, or template`, errors);
+    const hasPrompt = (
+        hasNonEmptyString(command.prompt)
+        || hasNonEmptyString(command.promptKey)
+        || hasNonEmptyString(command.text)
+        || hasNonEmptyString(command.textKey)
+        || hasNonEmptyString(command.template)
+        || hasNonEmptyString(command.templateKey)
+    );
+    assert(hasPrompt, `${label} requires prompt/promptKey, text/textKey, or template/templateKey`, errors);
     if (command.aliases !== undefined) {
         validateStringArray(command.aliases, `${label}.aliases`, errors);
     }
@@ -392,6 +481,10 @@ function validatePluginManifest(manifest, filePath) {
     assert(pluginScopes.has(scope), `${relativeFile}: unsupported scope "${scope}"`, errors);
     assert(displayName.length > 0, `${relativeFile}: displayName is required`, errors);
     assert(description.length > 0, `${relativeFile}: description is required`, errors);
+
+    if (manifest.i18n !== undefined) {
+        validatePluginI18n(manifest.i18n, filePath, `${relativeFile}: i18n`, errors);
+    }
 
     if (manifest.activationEvents !== undefined) {
         validateStringArray(manifest.activationEvents, `${relativeFile}: activationEvents`, errors);

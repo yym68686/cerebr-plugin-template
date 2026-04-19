@@ -11,6 +11,7 @@ Runtime notes:
 - Extension-hosted `page` script plugins run through Cerebr's managed `user_script` execution surface when the manifest is compatible; plugin code should not call `chrome.userScripts` directly.
 - If diagnostics report `userscripts-toggle-disabled`, the user still needs to enable **Allow User Scripts** for the Cerebr extension.
 - Web-hosted local bundle plugins now load through stable `data:` module URLs by default; do not depend on `blob:` URL lifetime.
+- `context.api.i18n` is available on `page`, `shell`, and `background` runtimes, and resolves plugin-private locale resources before host translations.
 
 ## Page runtime permissions
 

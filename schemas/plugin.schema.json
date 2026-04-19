@@ -44,6 +44,9 @@
     "descriptionKey": {
       "type": "string"
     },
+    "i18n": {
+      "$ref": "#/$defs/pluginI18n"
+    },
     "defaultEnabled": {
       "type": "boolean"
     },
@@ -206,6 +209,56 @@
       "type": "array",
       "items": {
         "type": "string"
+      }
+    },
+    "localizedMessageEntry": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["message"],
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "pluginMessagesTable": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/localizedMessageEntry"
+      }
+    },
+    "pluginLocaleMessages": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/pluginMessagesTable"
+      }
+    },
+    "pluginLocaleRefs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "pluginI18n": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "defaultLocale": {
+          "type": "string"
+        },
+        "messages": {
+          "$ref": "#/$defs/pluginLocaleMessages"
+        },
+        "locales": {
+          "$ref": "#/$defs/pluginLocaleRefs"
+        }
       }
     },
     "compatibility": {
@@ -401,16 +454,32 @@
     "selectionAction": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["label"],
       "anyOf": [
         {
+          "required": ["label"]
+        },
+        {
+          "required": ["labelKey"]
+        }
+      ],
+      "oneOf": [
+        {
           "required": ["prompt"]
+        },
+        {
+          "required": ["promptKey"]
         },
         {
           "required": ["text"]
         },
         {
+          "required": ["textKey"]
+        },
+        {
           "required": ["promptTemplate"]
+        },
+        {
+          "required": ["promptTemplateKey"]
         }
       ],
       "properties": {
@@ -420,7 +489,13 @@
         "label": {
           "$ref": "#/$defs/nonEmptyString"
         },
+        "labelKey": {
+          "type": "string"
+        },
         "title": {
+          "type": "string"
+        },
+        "titleKey": {
           "type": "string"
         },
         "icon": {
@@ -429,10 +504,19 @@
         "prompt": {
           "type": "string"
         },
+        "promptKey": {
+          "type": "string"
+        },
         "text": {
           "type": "string"
         },
+        "textKey": {
+          "type": "string"
+        },
         "promptTemplate": {
+          "type": "string"
+        },
+        "promptTemplateKey": {
           "type": "string"
         },
         "focus": {
@@ -469,10 +553,19 @@
         "text": {
           "type": "string"
         },
+        "textKey": {
+          "type": "string"
+        },
         "prompt": {
           "type": "string"
         },
+        "promptKey": {
+          "type": "string"
+        },
         "template": {
+          "type": "string"
+        },
+        "templateKey": {
           "type": "string"
         },
         "focus": {
@@ -482,6 +575,9 @@
           "type": "string"
         },
         "message": {
+          "type": "string"
+        },
+        "messageKey": {
           "type": "string"
         },
         "toastType": {
@@ -516,10 +612,19 @@
                 "required": ["text"]
               },
               {
+                "required": ["textKey"]
+              },
+              {
                 "required": ["prompt"]
               },
               {
+                "required": ["promptKey"]
+              },
+              {
                 "required": ["template"]
+              },
+              {
+                "required": ["templateKey"]
               }
             ]
           }
@@ -539,6 +644,12 @@
               },
               {
                 "required": ["text"]
+              },
+              {
+                "required": ["messageKey"]
+              },
+              {
+                "required": ["textKey"]
               }
             ]
           }
@@ -560,7 +671,21 @@
     "inputAction": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["execute"],
+      "required": ["id", "execute"],
+      "anyOf": [
+        {
+          "required": ["label"]
+        },
+        {
+          "required": ["labelKey"]
+        },
+        {
+          "required": ["icon"]
+        },
+        {
+          "required": ["iconSvg"]
+        }
+      ],
       "properties": {
         "id": {
           "type": "string"
@@ -568,10 +693,19 @@
         "label": {
           "type": "string"
         },
+        "labelKey": {
+          "type": "string"
+        },
         "icon": {
           "type": "string"
         },
+        "iconSvg": {
+          "type": "string"
+        },
         "title": {
+          "type": "string"
+        },
+        "titleKey": {
           "type": "string"
         },
         "variant": {
@@ -597,7 +731,15 @@
     "menuItem": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["label", "execute"],
+      "required": ["id", "execute"],
+      "anyOf": [
+        {
+          "required": ["label"]
+        },
+        {
+          "required": ["labelKey"]
+        }
+      ],
       "properties": {
         "id": {
           "type": "string"
@@ -605,10 +747,16 @@
         "label": {
           "$ref": "#/$defs/nonEmptyString"
         },
+        "labelKey": {
+          "type": "string"
+        },
         "icon": {
           "type": "string"
         },
         "title": {
+          "type": "string"
+        },
+        "titleKey": {
           "type": "string"
         },
         "order": {
@@ -634,10 +782,19 @@
           "required": ["prompt"]
         },
         {
+          "required": ["promptKey"]
+        },
+        {
           "required": ["text"]
         },
         {
+          "required": ["textKey"]
+        },
+        {
           "required": ["template"]
+        },
+        {
+          "required": ["templateKey"]
         }
       ],
       "properties": {
@@ -650,7 +807,13 @@
         "label": {
           "type": "string"
         },
+        "labelKey": {
+          "type": "string"
+        },
         "description": {
+          "type": "string"
+        },
+        "descriptionKey": {
           "type": "string"
         },
         "aliases": {
@@ -659,10 +822,19 @@
         "prompt": {
           "type": "string"
         },
+        "promptKey": {
+          "type": "string"
+        },
         "text": {
           "type": "string"
         },
+        "textKey": {
+          "type": "string"
+        },
         "template": {
+          "type": "string"
+        },
+        "templateKey": {
           "type": "string"
         },
         "separator": {

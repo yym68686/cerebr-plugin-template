@@ -5,7 +5,28 @@
   "kind": "script",
   "scope": "page",
   "displayName": "Selection Helper Template",
+  "nameKey": "selection_helper.name",
   "description": "A starter page plugin that shows an anchored action for selected text and imports a prompt into Cerebr.",
+  "descriptionKey": "selection_helper.description",
+  "i18n": {
+    "defaultLocale": "en",
+    "messages": {
+      "en": {
+        "selection_helper.name": "Selection Helper Template",
+        "selection_helper.description": "A starter page plugin that shows an anchored action for selected text and imports a prompt into Cerebr.",
+        "selection_helper.action_label": "Ask Cerebr",
+        "selection_helper.action_title": "Ask Cerebr about this selection",
+        "selection_helper.import_prompt": "Please explain the selected text and extract the key points:\n\n$1"
+      },
+      "zh-CN": {
+        "selection_helper.name": "选区助手模板",
+        "selection_helper.description": "一个页面插件起步模板：在选中文本旁显示锚定按钮，并把提示词导入 Cerebr。",
+        "selection_helper.action_label": "询问 Cerebr",
+        "selection_helper.action_title": "让 Cerebr 解释这段选中文本",
+        "selection_helper.import_prompt": "请解释下面选中的文本，并提取关键要点：\n\n$1"
+      }
+    }
+  },
   "defaultEnabled": true,
   "requiresExtension": true,
   "permissions": [

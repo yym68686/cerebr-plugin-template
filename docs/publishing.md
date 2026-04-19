@@ -23,6 +23,7 @@ For local sideloaded script plugins:
 
 - `script.entry` is resolved relative to `plugin.json`
 - relative imports inside the plugin folder stay relative to the plugin folder
+- locale files referenced by `plugin.json -> i18n.locales` are resolved relative to `plugin.json`
 - bare imports like `lodash` are rejected
 - cross-origin script imports are rejected
 - dropped local `shell` plugins should use relative imports only
@@ -32,6 +33,7 @@ For reviewed marketplace packages:
 
 - `plugin.json` is fetched from `install.packageUrl`
 - `script.entry` is resolved relative to that fetched `plugin.json`
+- `i18n.locales` are also resolved relative to that fetched `plugin.json`
 - `script.entry` must stay on the same origin as the package manifest
 - remote script packages should be self-contained
 
@@ -91,6 +93,7 @@ Optional metadata that the refactored host understands:
 5. Verify that `requiresExtension` is set correctly.
 6. Verify that `script.entry` points at the published file.
 7. If you publish a registry entry, make sure `install.packageUrl` points to the versioned `plugin.json`.
+8. If you use `i18n.locales`, make sure every referenced locale JSON file is included in the published package.
 
 ## Compatibility baseline
 

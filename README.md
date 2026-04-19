@@ -27,6 +27,8 @@ The root of the repository is already a valid local `page` script plugin, and th
 
 For extension-hosted `page` plugins, Cerebr now manages the underlying execution surface for you. Keep writing against `setup(context)` and the host capability APIs; do not call `chrome.userScripts` directly from plugin code. If Chrome shows a `userscripts-toggle-disabled` diagnostic, enable **Allow User Scripts** for Cerebr in `chrome://extensions`.
 
+Plugins can also ship private locale resources through `plugin.json -> i18n`. The root template now demonstrates this with `nameKey`, `descriptionKey`, and `api.i18n.getMessage(...)` calls in [page.js](./page.js).
+
 The root [plugin.json](./plugin.json) is the sideload entry. Nested example manifests under [examples](./examples) are ignored as long as the root manifest is present.
 
 ## Root layout

@@ -1,6 +1,9 @@
 const PLUGIN_ID = 'template.page.selection-helper';
 const MIN_SELECTION_LENGTH = 2;
 const MAX_SELECTION_LENGTH = 4000;
+const ACTION_LABEL_KEY = 'selection_helper.action_label';
+const ACTION_TITLE_KEY = 'selection_helper.action_title';
+const IMPORT_PROMPT_KEY = 'selection_helper.import_prompt';
 
 function normalizeSelectedText(value) {
     return String(value ?? '')
@@ -41,11 +44,15 @@ export default {
             const nextConfig = {
                 rect: selection.rect,
                 icon: 'dot',
-                label: 'Ask Cerebr',
-                title: 'Ask Cerebr about this selection',
+                label: api.i18n.getMessage(ACTION_LABEL_KEY, [], 'Ask Cerebr'),
+                title: api.i18n.getMessage(ACTION_TITLE_KEY, [], 'Ask Cerebr about this selection'),
                 onClick() {
                     api.shell.importText(
-                        `Please explain the selected text and extract the key points:\n\n${text}`,
+                        api.i18n.getMessage(
+                            IMPORT_PROMPT_KEY,
+                            [text],
+                            `Please explain the selected text and extract the key points:\n\n${text}`
+                        ),
                         { focus: true }
                     );
                     api.page.clearSelection();

@@ -26,6 +26,7 @@ The refactored runtime is split into:
   - keeps diagnostics and failure state
 - host services
   - assemble the stable API seen by plugins
+  - resolve plugin-local i18n before falling back to host locale messages
 - hosts
   - `page`
   - `shell`
@@ -82,6 +83,7 @@ Common services:
 
 - `page.*`
 - `site.*`
+- `i18n.*`
 - `ui.showAnchoredAction(...)`
 - `ui.mountSlot(...)`
 - `shell.*`
@@ -117,12 +119,15 @@ Use for:
 - tab coordination
 - storage orchestration
 - cross-tab bridge routing
+- locale-aware background automation
 
 Background plugins must set:
 
 ```json
 "requiresExtension": true
 ```
+
+Background runtime now exposes `context.api.i18n` as well, so background plugins can resolve plugin-local messages and react to locale changes without reaching into host internals.
 
 ## Activation events
 
@@ -168,7 +173,17 @@ Instead, Cerebr:
 1. validates whether the manifest is compatible with the managed `user_script` surface
 2. registers the bundled page plugin through the extension host
 3. bridges `page`, `site`, `ui`, `shell`, and `bridge` capability calls back into the normal page runtime
-4. reports `userscripts-api-unavailable`, `userscripts-toggle-disabled`, or capability-specific diagnostics when the host cannot provide that surface
+4. wires `i18n.getLocale()` / `i18n.onLocaleChanged(...)` through the same host bridge
+5. reports `userscripts-api-unavailable`, `userscripts-toggle-disabled`, or capability-specific diagnostics when the host cannot provide that surface
+
+## Localization model
+
+For script and declarative plugins, Cerebr now treats plugin-private locale files as first-class package data.
+
+- `plugin.json` can declare `i18n.messages`
+- or `i18n.locales` that point at bundled locale JSON files
+- runtime text resolution checks plugin-local messages first, then host locale messages
+- settings cards resolve installed plugin `nameKey` / `descriptionKey` using the plugin package i18n payload
 
 ## Preferred shell UI stack
 

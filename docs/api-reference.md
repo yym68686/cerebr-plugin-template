@@ -63,6 +63,39 @@ setup({ shell }) {
 }
 ```
 
+## Plugin-local i18n resources
+
+Plugins can now ship private locale resources in `plugin.json`:
+
+```json
+"nameKey": "my_plugin.name",
+"descriptionKey": "my_plugin.description",
+"i18n": {
+  "defaultLocale": "en",
+  "messages": {
+    "en": {
+      "my_plugin.name": "My Plugin"
+    }
+  },
+  "locales": {
+    "zh-CN": "./locales/zh-CN.json"
+  }
+}
+```
+
+Resolution order is:
+
+1. plugin-local `i18n.messages` / `i18n.locales`
+2. host locale messages
+3. the explicit fallback string passed to `getMessage(...)`
+
+Use localized keys for:
+
+- `nameKey`
+- `descriptionKey`
+- `contentKey` in prompt fragments
+- `labelKey` / `titleKey` / `promptKey` / `messageKey` in declarative contributions
+
 ## Manifest-level activation
 
 Prefer declaring activation in `plugin.json`:
@@ -98,6 +131,12 @@ If Chrome reports `userscripts-toggle-disabled`, the host is telling you that th
 - `query(selector)`
 - `queryAll(selector)`
 - `getMessage(key, substitutions, fallback)`
+
+`context.api.i18n`
+
+- `getLocale()`
+- `getMessage(key, substitutions, fallback)`
+- `onLocaleChanged(callback, options)`
 
 `context.api.site`
 
@@ -212,6 +251,8 @@ If Chrome reports `userscripts-toggle-disabled`, the host is telling you that th
 - `observeTheme(callback, options)`
 - `getThemeSnapshot()`
 
+Menu items passed to `setMenuItems(items)` can provide either `icon` (plain text) or `iconSvg` (sanitized inline SVG) in addition to `label`, `title`, `order`, `disclosure`, `disabled`, and `execute`.
+
 ## Background script APIs
 
 `context.api.browser`
@@ -233,6 +274,12 @@ If Chrome reports `userscripts-toggle-disabled`, the host is telling you that th
 - `send(target, command, payload)`
 - `sendToTab(tabId, target, command, payload)`
 - `broadcast(target, command, payload, options)`
+
+`context.api.i18n`
+
+- `getLocale()`
+- `getMessage(key, substitutions, fallback)`
+- `onLocaleChanged(callback, options)`
 
 ## Hooks
 
