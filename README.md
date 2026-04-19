@@ -18,7 +18,7 @@ The root of the repository is already a valid local `page` script plugin, and th
 ## Quick start
 
 1. Rename the plugin id in [plugin.json](./plugin.json) and [page.js](./page.js).
-2. Update `displayName`, `description`, resource-scoped `permissions`, `activationEvents`, and `compatibility.versionRange`.
+2. Update `displayName`, `description`, `homepage`, resource-scoped `permissions`, `activationEvents`, and `compatibility.versionRange`.
 3. Replace the sample logic in [page.js](./page.js), or switch the root manifest to `shell` / `background`.
 4. Run `npm run check`.
 5. In Cerebr, enable developer mode.
@@ -28,6 +28,8 @@ The root of the repository is already a valid local `page` script plugin, and th
 For extension-hosted `page` plugins, Cerebr now manages the underlying execution surface for you. Keep writing against `setup(context)` and the host capability APIs; do not call `chrome.userScripts` directly from plugin code. If Chrome shows a `userscripts-toggle-disabled` diagnostic, enable **Allow User Scripts** for Cerebr in `chrome://extensions`.
 
 Plugins can also ship private locale resources through `plugin.json -> i18n`. The root template now demonstrates this with `nameKey`, `descriptionKey`, and `api.i18n.getMessage(...)` calls in [page.js](./page.js).
+
+If you want Cerebr to show your repository on plugin cards, set `plugin.json -> homepage` to the public open-source URL. The plugin settings UI now renders that field as the plugin's open-source address.
 
 The root [plugin.json](./plugin.json) is the sideload entry. Nested example manifests under [examples](./examples) are ignored as long as the root manifest is present.
 

@@ -8,6 +8,7 @@
   "nameKey": "selection_helper.name",
   "description": "A starter page plugin that shows an anchored action for selected text and imports a prompt into Cerebr.",
   "descriptionKey": "selection_helper.description",
+  "homepage": "https://github.com/your-name/cerebr-plugin-example",
   "i18n": {
     "defaultLocale": "en",
     "messages": {

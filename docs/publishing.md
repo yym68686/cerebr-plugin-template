@@ -83,6 +83,9 @@ Optional metadata that the refactored host understands:
 
 - `activationEvents`
 - `contributionTypes`
+- `homepage`
+
+If `plugin.json -> homepage` is set, Cerebr shows it on plugin cards as the plugin's open-source address. Use a public `https://...` repository URL when you want other users to inspect the source.
 
 ## Suggested release checklist
 
@@ -92,8 +95,9 @@ Optional metadata that the refactored host understands:
 4. Verify that `activationEvents` are narrow and intentional.
 5. Verify that `requiresExtension` is set correctly.
 6. Verify that `script.entry` points at the published file.
-7. If you publish a registry entry, make sure `install.packageUrl` points to the versioned `plugin.json`.
-8. If you use `i18n.locales`, make sure every referenced locale JSON file is included in the published package.
+7. Verify that `homepage` points at the repository or open-source page you want users to see on the plugin card.
+8. If you publish a registry entry, make sure `install.packageUrl` points to the versioned `plugin.json`.
+9. If you use `i18n.locales`, make sure every referenced locale JSON file is included in the published package.
 
 ## Compatibility baseline
 
