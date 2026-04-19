@@ -251,7 +251,7 @@ If Chrome reports `userscripts-toggle-disabled`, the host is telling you that th
 - `observeTheme(callback, options)`
 - `getThemeSnapshot()`
 
-Menu items passed to `setMenuItems(items)` can provide either `icon` (plain text) or `iconSvg` (sanitized inline SVG) in addition to `label`, `title`, `order`, `disclosure`, `disabled`, and `execute`.
+Menu items passed to `setMenuItems(items)` can provide either `icon` (plain text) or `iconSvg` (sanitized inline SVG). Use `iconPlacement: 'leading'` for a left-side icon, or `iconPlacement: 'disclosure'` to replace the right-side chevron.
 
 ## Background script APIs
 

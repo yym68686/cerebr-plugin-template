@@ -314,6 +314,14 @@ function validateMenuItem(item, label, errors) {
     if (item.iconSvg !== undefined) {
         assert(typeof item.iconSvg === 'string', `${label}.iconSvg must be a string`, errors);
     }
+    if (item.iconPlacement !== undefined) {
+        const iconPlacement = String(item.iconPlacement).trim();
+        assert(
+            iconPlacement === 'leading' || iconPlacement === 'disclosure',
+            `${label}.iconPlacement must be leading or disclosure`,
+            errors
+        );
+    }
     validateShellExecute(item.execute, `${label}.execute`, errors);
 }
 
