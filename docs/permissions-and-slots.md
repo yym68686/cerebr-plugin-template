@@ -8,6 +8,8 @@ Runtime notes:
 
 - Cerebr runs a preflight check before activation and refuses obvious host/runtime mismatches early.
 - Prefer host-provided capability APIs such as `context.api.ui.copyText(...)` or `context.api.chat.getRenderedTranscript()` over direct browser globals.
+- Extension-hosted `page` script plugins run through Cerebr's managed `user_script` execution surface when the manifest is compatible; plugin code should not call `chrome.userScripts` directly.
+- If diagnostics report `userscripts-toggle-disabled`, the user still needs to enable **Allow User Scripts** for the Cerebr extension.
 - Web-hosted local bundle plugins now load through stable `data:` module URLs by default; do not depend on `blob:` URL lifetime.
 
 ## Page runtime permissions

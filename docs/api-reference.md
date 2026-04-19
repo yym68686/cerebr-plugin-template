@@ -81,6 +81,10 @@ Common values:
 
 ## Page script APIs
 
+Extension-hosted local or marketplace `page` script plugins now run on Cerebr's managed `user_script` execution surface when the host deems them compatible. Plugin authors should keep using `setup(context)` plus the stable `context.api.page / site / ui / shell / bridge` namespaces. Do not call `chrome.userScripts` directly from plugin code.
+
+If Chrome reports `userscripts-toggle-disabled`, the host is telling you that the user still needs to enable **Allow User Scripts** for the Cerebr extension in `chrome://extensions`.
+
 `context.api.page`
 
 - `getSelection()`

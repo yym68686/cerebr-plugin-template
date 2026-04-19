@@ -17,7 +17,7 @@
   ],
   "activationEvents": ["shell.ready"],
   "compatibility": {
-    "versionRange": ">=2.4.86 <3.0.0"
+    "versionRange": ">=2.4.98 <3.0.0"
   },
   "script": {
     "entry": "./shell.js"

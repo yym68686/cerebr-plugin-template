@@ -21,7 +21,7 @@
         "promptFragments"
       ],
       "compatibility": {
-        "versionRange": ">=2.4.86 <3.0.0"
+        "versionRange": ">=2.4.98 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -49,7 +49,7 @@
         "requestPolicies"
       ],
       "compatibility": {
-        "versionRange": ">=2.4.86 <3.0.0"
+        "versionRange": ">=2.4.98 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -78,7 +78,7 @@
         "pageExtractors"
       ],
       "compatibility": {
-        "versionRange": ">=2.4.86 <3.0.0"
+        "versionRange": ">=2.4.98 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -106,7 +106,7 @@
         "shell.ready"
       ],
       "compatibility": {
-        "versionRange": ">=2.4.86 <3.0.0"
+        "versionRange": ">=2.4.98 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -134,7 +134,7 @@
         "hook:onCommand"
       ],
       "compatibility": {
-        "versionRange": ">=2.4.86 <3.0.0"
+        "versionRange": ">=2.4.98 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -165,7 +165,7 @@
         "selectionActions"
       ],
       "compatibility": {
-        "versionRange": ">=2.4.86 <3.0.0"
+        "versionRange": ">=2.4.98 <3.0.0"
       },
       "availability": {
         "status": "active",
@@ -197,7 +197,7 @@
         "slashCommands"
       ],
       "compatibility": {
-        "versionRange": ">=2.4.86 <3.0.0"
+        "versionRange": ">=2.4.98 <3.0.0"
       },
       "availability": {
         "status": "active",

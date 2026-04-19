@@ -25,6 +25,8 @@ The root of the repository is already a valid local `page` script plugin, and th
 6. Open `Settings -> Plugins -> Developer`.
 7. Drag this folder into Cerebr, or use `Choose Plugin Folder`.
 
+For extension-hosted `page` plugins, Cerebr now manages the underlying execution surface for you. Keep writing against `setup(context)` and the host capability APIs; do not call `chrome.userScripts` directly from plugin code. If Chrome shows a `userscripts-toggle-disabled` diagnostic, enable **Allow User Scripts** for Cerebr in `chrome://extensions`.
+
 The root [plugin.json](./plugin.json) is the sideload entry. Nested example manifests under [examples](./examples) are ignored as long as the root manifest is present.
 
 ## Root layout
@@ -112,8 +114,8 @@ If you want npm packages or TypeScript, bundle them into local files before inst
 
 ## Current template baseline
 
-- tested against Cerebr `2.4.86`
-- compatibility range in template examples: `>=2.4.86 <3.0.0`
+- tested against Cerebr `2.4.98`
+- compatibility range in template examples: `>=2.4.98 <3.0.0`
 
 Update those ranges when the host runtime changes.
 

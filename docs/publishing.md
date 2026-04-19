@@ -97,5 +97,5 @@ Optional metadata that the refactored host understands:
 The template examples currently target:
 
 ```text
->=2.4.86 <3.0.0
+>=2.4.98 <3.0.0
 ```

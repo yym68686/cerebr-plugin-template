@@ -12,7 +12,7 @@
   ],
   "activationEvents": ["app.startup"],
   "compatibility": {
-    "versionRange": ">=2.4.86 <3.0.0"
+    "versionRange": ">=2.4.98 <3.0.0"
   },
   "contributions": {
     "promptFragments": [

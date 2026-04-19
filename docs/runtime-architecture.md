@@ -86,6 +86,8 @@ Common services:
 - `ui.mountSlot(...)`
 - `shell.*`
 
+In the browser extension host, compatible local or marketplace `page` script plugins are executed through Cerebr's internal `user_script` surface. This is a host implementation detail: plugin authors still write against the normal `setup(context)` API and should not reference `chrome.userScripts` directly.
+
 ### `shell`
 
 Use for:
@@ -156,6 +158,17 @@ That means:
 - do not import `/src/...` host internals
 - do not depend on direct host DOM access
 - prefer local JS/JSON module imports over runtime fetches against `import.meta.url`
+
+## Local page runtime
+
+Dropped local `page` plugins in the browser extension host no longer rely on sandbox iframes or `blob:` / `data:` module execution for the main path.
+
+Instead, Cerebr:
+
+1. validates whether the manifest is compatible with the managed `user_script` surface
+2. registers the bundled page plugin through the extension host
+3. bridges `page`, `site`, `ui`, `shell`, and `bridge` capability calls back into the normal page runtime
+4. reports `userscripts-api-unavailable`, `userscripts-toggle-disabled`, or capability-specific diagnostics when the host cannot provide that surface
 
 ## Preferred shell UI stack
 
