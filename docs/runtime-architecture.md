@@ -163,6 +163,9 @@ That means:
 - do not import `/src/...` host internals
 - do not depend on direct host DOM access
 - prefer local JS/JSON module imports over runtime fetches against `import.meta.url`
+- host-bridged `chat.getCurrentChat()`, `chat.getMessages()`, and `chat.getRenderedTranscript()` stay available inside the guest runtime
+- host-bridged `i18n.getLocale()`, `i18n.getMessage()`, and `i18n.onLocaleChanged(...)` stay available inside the guest runtime
+- `i18n.getMessage()` still resolves synchronously to a string; do not treat it as an async RPC helper
 
 ## Local page runtime
 
@@ -184,6 +187,7 @@ For script and declarative plugins, Cerebr now treats plugin-private locale file
 - or `i18n.locales` that point at bundled locale JSON files
 - runtime text resolution checks plugin-local messages first, then host locale messages
 - settings cards resolve installed plugin `nameKey` / `descriptionKey` using the plugin package i18n payload
+- `getMessage(...)` keeps synchronous string-return semantics even when the plugin is running behind a guest bridge
 
 ## Preferred shell UI stack
 
@@ -197,3 +201,5 @@ For shell UI, use these surfaces in order:
 6. `shell.mountInputAddon()`
 
 This keeps plugins aligned with Cerebr's native UI and reduces fragile DOM coupling.
+
+The host page renderer is now capable of more complex management UIs, including sortable lists and inline row bodies. Prefer extending `page.view` before falling back to a custom guest iframe surface, especially for settings-style screens that need drag reordering, forms, and import/export actions.

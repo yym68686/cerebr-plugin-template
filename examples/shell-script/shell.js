@@ -146,7 +146,7 @@ function buildPageModel({ source = 'menu', preset = 'short' } = {}) {
                                             {
                                                 id: 'page',
                                                 title: '`shell.openPage({ view })`',
-                                                description: 'Let Cerebr render the management page.',
+                                                description: 'Let Cerebr render the management page, including sortable lists and inline form sections.',
                                             },
                                             {
                                                 id: 'prompt',

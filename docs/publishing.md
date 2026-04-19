@@ -16,6 +16,8 @@ Rules:
 - supported script scopes are `page`, `shell`, and `background`
 - `background` plugins only run in the browser extension host and must set `requiresExtension: true`
 - dropped local `shell` plugins in the extension host run inside the sandboxed guest runtime and must stay self-contained
+- dropped local `shell` plugins should still use the normal host capability APIs such as `api.chat.getCurrentChat()`, `api.chat.getMessages()`, and `api.i18n.getMessage(...)`
+- `api.i18n.getMessage(...)` returns a string synchronously in that guest runtime; do not `await` it
 
 ## Script entry resolution
 

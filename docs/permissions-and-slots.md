@@ -75,6 +75,8 @@ Runtime notes:
 
 ## Shell runtime permissions
 
+For `shell` plugins running in the guest runtime, the chat read APIs below are still bridged through the host. Permission names and return shapes stay the same.
+
 - `chat:current`
   - `chat.getCurrentChat()`
 
@@ -257,3 +259,10 @@ For shell plugins, choose the first surface that fits:
 6. `shell.mountInputAddon()`
 
 If a plugin page can be expressed as cards, forms, lists, notes, stats, and actions, use a host-rendered page instead of custom plugin CSS.
+
+Host-rendered lists now also support drag sorting and inline expandable rows:
+
+- `{ kind: 'list', sortable: true }` enables mouse drag reordering.
+- list items can provide `token` for a compact code-style prefix such as `/translate`.
+- list items can provide `body` with nested host-rendered nodes, which is useful for inline editors under the row.
+- `shell.onPageEvent(...)` receives `type: 'reorder'` with `orderedItemIds`, `fromIndex`, and `toIndex` after a drag completes.

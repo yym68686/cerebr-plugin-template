@@ -89,6 +89,8 @@ Resolution order is:
 2. host locale messages
 3. the explicit fallback string passed to `getMessage(...)`
 
+`getLocale()` and `getMessage(...)` are synchronous runtime APIs. `getMessage(...)` returns the resolved string directly in page, shell, background, and guest-proxied runtimes; do not `await` it.
+
 Use localized keys for:
 
 - `nameKey`
@@ -195,6 +197,8 @@ If Chrome reports `userscripts-toggle-disabled`, the host is telling you that th
 - `retry(reason, options)`
 - `cancel(reason)`
 
+For `shell` plugins running in the guest runtime, `getCurrentChat()`, `getMessages()`, and `getRenderedTranscript()` are bridged back to the host and keep the same return shapes as the normal shell runtime.
+
 `context.api.prompt`
 
 - `addFragment(fragment)`
@@ -224,6 +228,8 @@ If Chrome reports `userscripts-toggle-disabled`, the host is telling you that th
 - `getMessage(key, substitutions, fallback)`
 - `onLocaleChanged(callback, options)`
 
+`getMessage(...)` returns a string immediately. `onLocaleChanged(...)` keeps guest and non-guest shell runtimes aligned with the active host locale.
+
 `context.api.shell`
 
 - `isVisible()`
@@ -252,6 +258,16 @@ If Chrome reports `userscripts-toggle-disabled`, the host is telling you that th
 - `getThemeSnapshot()`
 
 Menu items passed to `setMenuItems(items)` can provide either `icon` (plain text) or `iconSvg` (sanitized inline SVG). Use `iconPlacement: 'leading'` for a left-side icon, or `iconPlacement: 'disclosure'` to replace the right-side chevron.
+
+Host-rendered pages exposed via `openPage(page)` / `updatePage(page)` and observed through `onPageEvent(callback)` can emit:
+
+- `open`
+- `close`
+- `action`
+- `change`
+- `reorder`
+
+Sortable host lists use `{ kind: 'list', sortable: true }`. When a user drags an item, `onPageEvent(...)` receives a `reorder` payload with `listId`, `itemId`, `targetItemId`, `fromIndex`, `toIndex`, `orderedItemIds`, and current `values`. List items can also provide `token` for an inline command-style pill and `body` for nested host-rendered sections such as inline forms and action rows.
 
 ## Background script APIs
 
