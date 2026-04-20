@@ -267,7 +267,7 @@ Host-rendered pages exposed via `openPage(page)` / `updatePage(page)` and observ
 - `change`
 - `reorder`
 
-Sortable host lists use `{ kind: 'list', sortable: true }`. When a user drags an item, `onPageEvent(...)` receives a `reorder` payload with `listId`, `itemId`, `targetItemId`, `fromIndex`, `toIndex`, `orderedItemIds`, and current `values`. List items can also provide `token` for an inline command-style pill and `body` for nested host-rendered sections such as inline forms and action rows.
+Sortable host lists use `{ kind: 'list', sortable: true }`. The host keeps inline row bodies attached while items move, reorders the DOM live during drag, and defaults to `dragPreview: 'inline'`, which runs host-managed pointer sorting instead of a browser drag session. That avoids browser-native ghost images, link/text drag decoration, and OS drag badges before the reorder commit lands. Set `dragPreview: 'native'` only if you explicitly want browser drag behavior. Sortable lists also accept `dragHandle: 'comfortable' | 'compact'` to control the host drag affordance size, `sortingStyle: 'emphasized' | 'default'` to tune how strongly the host de-emphasizes non-dragging rows during live reorder, and `dropIndicator: 'none' | 'line'` to control the legacy insertion marker. Sortable lists emit a `reorder` payload through `onPageEvent(...)` with `listId`, `itemId`, `targetItemId`, `fromIndex`, `toIndex`, `orderedItemIds`, and current `values`. List items can also provide `token` for an inline command-style pill and `body` for nested host-rendered sections such as inline forms and action rows.
 
 ## Background script APIs
 

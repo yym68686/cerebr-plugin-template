@@ -202,4 +202,4 @@ For shell UI, use these surfaces in order:
 
 This keeps plugins aligned with Cerebr's native UI and reduces fragile DOM coupling.
 
-The host page renderer is now capable of more complex management UIs, including sortable lists and inline row bodies. Prefer extending `page.view` before falling back to a custom guest iframe surface, especially for settings-style screens that need drag reordering, forms, and import/export actions.
+The host page renderer is now capable of more complex management UIs, including sortable lists with live drag reordering, inline drag feedback that avoids browser/OS drag artifacts by using host-managed pointer sorting, configurable drag affordances/emphasis, and inline row bodies that stay rendered inside the host page. Prefer extending `page.view` before falling back to a custom guest iframe surface, especially for settings-style screens that need drag reordering, forms, and import/export actions.

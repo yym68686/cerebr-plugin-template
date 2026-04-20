@@ -262,7 +262,9 @@ If a plugin page can be expressed as cards, forms, lists, notes, stats, and acti
 
 Host-rendered lists now also support drag sorting and inline expandable rows:
 
-- `{ kind: 'list', sortable: true }` enables mouse drag reordering.
+- `{ kind: 'list', sortable: true }` enables live mouse drag reordering in the host renderer.
+- sortable lists default to `dragPreview: 'inline'`, which uses host-managed pointer sorting, keeps the host row itself as the visible drag feedback, and avoids browser/OS drag decoration such as native ghost images or badges on release.
+- sortable lists can also set `dragHandle: 'comfortable' | 'compact'`, `sortingStyle: 'emphasized' | 'default'`, and `dropIndicator: 'none' | 'line'` to tune the host drag UX without custom DOM work.
 - list items can provide `token` for a compact code-style prefix such as `/translate`.
-- list items can provide `body` with nested host-rendered nodes, which is useful for inline editors under the row.
+- list items can provide `body` with nested host-rendered nodes, which is useful for inline editors under the row and stays attached while dragging.
 - `shell.onPageEvent(...)` receives `type: 'reorder'` with `orderedItemIds`, `fromIndex`, and `toIndex` after a drag completes.
