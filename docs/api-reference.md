@@ -211,6 +211,8 @@ It may also include `modelSelection: { configId: string, modelName: string }`, t
 
 `sendDraft()` and `regenerate(messageElement)` return a promise for the chat request lifecycle, not a disk-write acknowledgement. Once the request finishes or is stopped, the host releases its request lock and starts an immediate background save; storage delays or failures must not block the next send, retry, or chat navigation. Failed chat writes remain queued for automatic retry. Plugins can read the current in-memory messages with `getMessages()`, but must not treat a successful request result as a guarantee that those messages are already persisted. The host reports save failures to the user.
 
+Requests are scoped to the conversation that was active when `sendDraft()` or `regenerate()` was called. Switching chats does not cancel its response; multiple conversations can stream concurrently. `abort()` stops only the currently selected conversation. Lifecycle hooks can run interleaved across conversations: use their `chatId` and request context rather than `getCurrentChat()` to identify the originating conversation. The latter always describes the conversation currently visible in the UI. A terminal SSE `[DONE]` or `finish_reason` settles the request even if the server keeps its HTTP connection open.
+
 Rendered transcript snapshots preserve Markdown reasoning as native HTML `<details>` / `<summary>` so exported pages can expand it without host React handlers. Transient loading animations and live elapsed timers are excluded. Consumers should treat `html` as self-contained content and should not depend on private host collapse selectors. The snapshot return fields are unchanged.
 
 `context.api.prompt`
