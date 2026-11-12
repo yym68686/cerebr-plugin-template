@@ -332,6 +332,8 @@ Shell hooks:
 
 Before `onBeforeSend`, the host collects all selected webpage/PDF content into `payload.webpageInfo.pages`. If a selected page cannot be read, the send is stopped with the draft preserved and the unavailable page identified; request hooks and the model are not called with silently incomplete context. With no pages selected, ordinary chat remains available. Webpage sources are explicitly selected per chat and remain selected after sending. A new chat starts without webpage references; the current browser tab is not implicitly included. Removing the last source returns to ordinary chat. Source chips are separate from editor drafts: `getDraftSnapshot()` returns message text, quotes, image attachments and TXT attachments, but not webpage sources. PDF extraction does not require opening Cerebr's sidebar in each source tab.
 
+Composer sends immediately clear the live editor and display a pending user message while webpage collection and hooks run. Use the captured `payload.draft` / `payload.userMessage` in `onBeforeSend`; reading the live editor can return an empty draft or the user's next question. The pending message enters `getMessages()` only after the hook accepts it, with hook transformations applied. Cancelling or failing before submission restores the original draft, retaining any follow-up text and attachments. File imports show individual loading attachments without blocking editing; unfinished imports are excluded from draft attachment snapshots, and sending remains disabled until imports finish or are removed.
+
 Shared hook:
 
 - `onBridgeMessage`
